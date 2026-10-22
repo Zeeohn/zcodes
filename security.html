@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Security · ZCODES</title><meta name="description" content=""><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet"><link rel="icon" href="img/zcodes.png"><link rel="stylesheet" href="style.css"></head>
+<body><header><div class="nav"><a class="brand" href="index.html"><img src="img/zcodes.png" alt="">ZCODES</a>
+      <a class="item" href="error-autopilot/index.html">Error Autopilot</a><a class="item" href="build-beacon/index.html">Build Beacon</a>
+      <a class="item" href="support.html">Support</a><a class="item" href="security.html">Security</a><a class="item" href="privacy.html">Privacy</a></div></header><main class="single"><article>
+<h1>Security</h1>
+<p class="lead">How ZCODES apps protect your data.</p>
+<h2>Architecture</h2>
+<ul>
+<li><b>Runs on Atlassian.</b> Apps are built on Atlassian Forge and are eligible for the Runs on Atlassian programme: compute and storage are hosted by Atlassian, and the apps make no outbound network calls.</li>
+<li><b>Inbound webhooks only.</b> Data enters through Forge web triggers with static responses, so nothing from your site is sent back to the caller.</li>
+<li><b>Verified senders.</b> Sentry and CircleCI webhooks are verified with HMAC-SHA256 using constant-time comparison; other senders need a 48-character random token. Invalid requests are rejected before any processing.</li>
+<li><b>Secrets.</b> Client secrets, signing tokens and webhook tokens are stored in Forge's encrypted secret storage. Client secrets and signing tokens are never shown again after saving; the generic webhook token is shown only to Jira administrators, inside its URL, and can be rotated at any time.</li>
+<li><b>Least privilege.</b> Settings actions check that the caller is a Jira administrator. Scopes are limited to what each feature needs.</li>
+<li><b>Licensing.</b> Apps stop processing when their subscription is inactive.</li>
+</ul>
+<h2>Scopes</h2>
+<table><tr><th>App</th><th>Scope</th><th>Why</th></tr>
+<tr><td>Error Autopilot</td><td>read:jira-work, write:jira-work</td><td>Create, comment on, transition and label issues; set the issue property used for the panel and JQL.</td></tr>
+<tr><td>Error Autopilot</td><td>read:jira-user</td><td>Optional assignee sync: find the Jira user that matches the Sentry assignee's email.</td></tr>
+<tr><td>Both</td><td>storage:app</td><td>Settings, encrypted secrets, issue links, activity log.</td></tr>
+<tr><td>Build Beacon</td><td>read:jira-work, write:jira-work</td><td>Send builds and deployments, comment on failures, set the issue property used for JQL.</td></tr>
+</table>
+<h2>Reporting a vulnerability</h2>
+<p>Email <a href="mailto:support@behumbot.xyz">support@behumbot.xyz</a> with the subject "Security". We acknowledge within 2 business days and keep you updated until it is fixed. Please don't publicly disclose issues before we have released a fix.</p>
+</article></main><footer><div class="in"><span>© 2026 ZCODES</span><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+      <a href="security.html">Security</a><a href="support.html">Support</a><span>Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI.</span></div></footer></body></html>

@@ -1,0 +1,124 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Error Autopilot for Jira: documentation</title><meta name="description" content="Sentry alerts become Jira issues automatically."><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet"><link rel="icon" href="../img/zcodes.png"><link rel="stylesheet" href="../style.css"></head>
+<body><header><div class="nav"><a class="brand" href="../index.html"><img src="../img/zcodes.png" alt="">ZCODES</a>
+      <a class="item" href="../error-autopilot/index.html">Error Autopilot</a><a class="item" href="../build-beacon/index.html">Build Beacon</a>
+      <a class="item" href="../support.html">Support</a><a class="item" href="../security.html">Security</a><a class="item" href="../privacy.html">Privacy</a></div></header><main class=""><aside><a href="#overview">Overview</a><a href="#install">Install & connect Sentry</a><a href="#routing">Routing & fields</a><a href="#rules">Rules</a><a href="#panel">Issue panel & JQL</a><a href="#other">GlitchTip & other tools</a><a href="#troubleshooting">Troubleshooting</a><a href="#faq">FAQ</a><a href="#data">Data & security</a></aside><article>
+<div class="hero"><img src="../img/error-autopilot.png" alt=""><div><h1>Error Autopilot for Jira</h1></div></div>
+<p class="lead">Sentry alerts become Jira issues automatically, and stay in sync, without upgrading Sentry to Business.</p>
+
+<h2 id="overview">Overview</h2>
+<p>Sentry only creates Jira issues automatically on its Business and Enterprise plans. Error Autopilot fills that gap for Team-plan organisations (and self-hosted Sentry): when a Sentry alert rule fires, a Jira issue is created with the stack trace, environment, release, culprit and a link back. When the error is resolved or regresses in Sentry, the Jira issue follows.</p>
+<img class="shot" src="../img/ea-highlight-1.png" alt="A Jira issue created by Error Autopilot with stack trace and Sentry panel">
+<table><tr><th>Feature</th><th>What it does</th></tr>
+<tr><td>Automatic issues</td><td>One Jira issue per Sentry issue, created when an alert rule with the Error Autopilot action fires (or for every new Sentry issue, if you choose).</td></tr>
+<tr><td>No duplicates</td><td>Repeat alerts become at most one comment per issue per window (default 6 h). Duplicate deliveries are ignored; links survive reinstalls.</td></tr>
+<tr><td>Sync</td><td>Resolved in Sentry → comment or move to Done. Regressed → comment or reopen.</td></tr>
+<tr><td>Escalation</td><td>After N regressions (default 2), raise priority (default Highest) and add a label (default <code>recurring</code>).</td></tr>
+<tr><td>Storm guard</td><td>Above N new issues per hour (default 20), further new errors are listed on one "Error storm" issue instead of creating hundreds.</td></tr>
+<tr><td>Noise control</td><td>Minimum level, environment filter, mute list.</td></tr>
+<tr><td>Fields</td><td>Routing per Sentry project or alert rule, priority by level, due dates by priority, labels (incl. <code>env-production</code>), summary template, assignee follows Sentry.</td></tr>
+<tr><td>Issue panel & JQL</td><td>A Sentry panel on linked issues, and JQL fields such as <code>sentryStatus</code> and <code>sentryRegressions</code>.</td></tr>
+<tr><td>Other tools</td><td>GlitchTip and any tool that can POST JSON, via a token-protected URL.</td></tr>
+</table>
+
+<h2 id="install">Install & connect Sentry</h2>
+<div class="note">You need to be a <b>Jira administrator</b> and a Sentry <b>Manager or Owner</b> (to create an internal integration). Takes about 5 minutes.</div>
+<ol>
+  <li>Install Error Autopilot from the Atlassian Marketplace, then open <b>Jira settings → Apps → Error Autopilot</b>.</li>
+  <li>On the <b>Connect</b> tab, copy the <b>Webhook URL</b>.</li>
+  <li>In Sentry go to <b>Settings → Integrations → Custom Integrations → Create New Integration → Internal Integration</b>.
+    <ul><li>Name: <code>Error Autopilot</code></li>
+    <li>Webhook URL: paste the URL from step 2.</li>
+    <li>Turn on <b>Alert Rule Action</b>.</li>
+    <li>Permissions: set <b>Issue &amp; Event</b> to <b>Read</b> first. Sentry only lets you tick the <b>issue</b> webhook after that.</li>
+    <li>Webhooks: tick <b>issue</b>. Save.</li></ul></li>
+  <li>Copy the integration's <b>Client Secret</b>, paste it into Error Autopilot's <b>Sentry client secret</b> field and click <b>Save</b>.</li>
+  <li>On the <b>Routing</b> tab, enter your <b>Default Jira space key</b> (e.g. <code>WEB</code>) and save.</li>
+  <li>In Sentry, open an alert (or create one, e.g. "A new issue is created") and add the action <b>Webhook → Error Autopilot</b>.</li>
+  <li>Back in Jira, click <b>Send a test error</b> on the Connect tab. You should see "Test passed: created WEB-1".</li>
+</ol>
+
+<h2 id="routing">Routing & fields</h2>
+<table><tr><th>Setting</th><th>Default</th><th>Notes</th></tr>
+<tr><td>Default Jira space key</td><td>none</td><td>Used when no routing line matches. Without it, nothing is created.</td></tr>
+<tr><td>Routing</td><td>empty</td><td>One per line: <code>sentry-project-slug=KEY</code>, <code>4508812345=KEY</code> (project ID), project name, or alert rule name. Alert payloads carry the numeric project ID, not the slug.</td></tr>
+<tr><td>Issue type</td><td>Bug</td><td>Must exist in the target space.</td></tr>
+<tr><td>Summary template</td><td>empty</td><td>Placeholders: <code>{title} {shortId} {project} {level} {environment} {culprit} {release}</code>. Empty = "[SHORT-ID] title".</td></tr>
+<tr><td>Labels</td><td>sentry</td><td>Comma separated. Optional <code>env-&lt;environment&gt;</code> label.</td></tr>
+<tr><td>Stack trace</td><td>on</td><td>Top in-app frames from the alert's event.</td></tr>
+<tr><td>Priority by level</td><td>fatal=Highest, error=High, warning=Medium</td><td>Use your Jira priority names. If a space doesn't allow priority, the field is skipped and the issue is still created.</td></tr>
+<tr><td>Due dates by priority</td><td>empty</td><td>e.g. <code>Highest=1</code>. Skipped automatically if the field isn't on the create screen.</td></tr>
+<tr><td>Assignee</td><td>Off</td><td>"Follow Sentry assignments" matches the Sentry assignee's email to exactly one Jira user; otherwise it leaves the assignee alone.</td></tr>
+</table>
+
+<h2 id="rules">Rules</h2>
+<table><tr><th>Setting</th><th>Default</th><th>Notes</th></tr>
+<tr><td>Create Jira issues</td><td>Only when an alert rule fires</td><td>"Every new Sentry issue" creates one for each new Sentry issue (noisier).</td></tr>
+<tr><td>Minimum level</td><td>error</td><td></td></tr>
+<tr><td>Only these environments</td><td>all</td><td>e.g. <code>production</code></td></tr>
+<tr><td>Mute</td><td>empty</td><td>Errors whose title or culprit contains a line are never ticketed.</td></tr>
+<tr><td>Storm guard</td><td>20 per hour</td><td>0 turns it off.</td></tr>
+<tr><td>Repeat alerts</td><td>1 comment per 6 h</td><td></td></tr>
+<tr><td>When resolved / regresses</td><td>comment</td><td>Or transition to Done / reopen (uses your workflow's status categories).</td></tr>
+<tr><td>Escalate after</td><td>2 regressions</td><td>Priority + label, once per issue. 0 turns it off.</td></tr>
+</table>
+
+<h2 id="panel">Issue panel & JQL</h2>
+<p>Issues created by Error Autopilot show a <b>Sentry</b> panel (status, level, environment, release, events, users, alerts received, regressions, first seen, last alert, link). The same data is indexed for JQL:</p>
+<pre><code>sentryStatus = regressed
+sentryRegressions >= 2 ORDER BY priority DESC
+sentryEnvironment = production AND sentryStatus = unresolved
+sentryRelease = "shop@4.12.0"
+sentryEvents > 100</code></pre>
+<p>Fields: <code>sentryStatus</code> (unresolved, resolved, regressed), <code>sentryLevel</code>, <code>sentryEnvironment</code>, <code>sentryRelease</code>, <code>sentryEvents</code>, <code>sentryUsers</code>, <code>sentryAlerts</code>, <code>sentryRegressions</code>, <code>sentryIssueId</code>. Event and user counts update when Sentry sends issue updates (resolve, regress, assign).</p>
+
+<h2 id="other">GlitchTip & other tools</h2>
+<p>The Connect tab shows a second URL that ends in <code>?token=…</code>. The token is a password: keep it private, and use <b>Issue a new token</b> if it leaks.</p>
+<h3>GlitchTip</h3>
+<p>Project settings → Alerts → add a recipient of type <b>General (Slack-compatible) Webhook</b> with the token URL.</p>
+<h3>Any tool or script</h3>
+<pre><code>curl -X POST "&lt;token URL&gt;" -H "Content-Type: application/json" -d '{
+  "id": "checkout-500",            // stable id: repeats update the same Jira issue
+  "title": "Checkout returns 500",
+  "url": "https://status.example.com/incidents/42",
+  "level": "error",                // debug | info | warning | error | fatal
+  "environment": "production",
+  "project": "shop",               // used for routing
+  "status": "open",                // open | resolved | regressed
+  "stacktrace": ["app.py:42 in submit"]
+}'</code></pre>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Start with <b>Activity</b> in the app settings: it lists what arrived and why something was or wasn't created.</p>
+<details><summary>Nothing arrives at all (Activity is empty)</summary><ul>
+<li>Check the Sentry integration's Webhook URL matches the URL on the Connect tab exactly. Reinstalling the app can change it.</li>
+<li>Check the client secret: paste it again and save. A wrong secret is silently rejected (HTTP 401) for your safety.</li>
+<li>Make sure the alert rule has the <b>Error Autopilot</b> webhook action, and that it actually fired (Sentry → Alerts → history).</li></ul></details>
+<details><summary>Activity says "no Jira project mapped"</summary><p>Set a <b>Default Jira space key</b>, or add a routing line. Alert payloads use the numeric Sentry project ID; you can also route by alert rule name.</p></details>
+<details><summary>Activity shows an error like "Jira create 400: issuetype"</summary><p>The issue type doesn't exist in that space. Set <b>Issue type</b> to one that does (e.g. Task). Priority and due date problems are handled automatically: the field is skipped and the issue is still created.</p></details>
+<details><summary>"mode=alerts", "below min level", "filtered" or "muted"</summary><p>These are your rules working: the error didn't qualify. Adjust them on the Rules tab.</p></details>
+<details><summary>Resolve or regression isn't reflected in Jira</summary><ul>
+<li>The Sentry integration must have the <b>issue</b> webhook ticked.</li>
+<li>For "Move to Done" or "Reopen", your workflow needs a transition into a Done (or To Do / In Progress) category status from the current status.</li></ul></details>
+<details><summary>Repeat alerts don't add comments</summary><p>By design: at most one "fired again" comment per issue per window (Rules → Repeat alerts).</p></details>
+<details><summary>Assignee doesn't follow Sentry</summary><p>The Sentry assignee's email must match exactly one Jira user that the app can find. Team assignments are ignored.</p></details>
+<details><summary>No Sentry panel / JQL field not recognised</summary><p>The panel appears only on issues created or updated by the app. New JQL fields can take a few minutes to become searchable after install.</p></details>
+<details><summary>"Subscription inactive" banner</summary><p>The app stops creating and updating issues when its subscription is inactive. A site admin can renew it in Administration → Apps.</p></details>
+<details><summary>"Only Jira administrators can do this"</summary><p>The settings page and test button require the Jira Administrator global permission.</p></details>
+
+<h2 id="faq">FAQ</h2>
+<details><summary>Which Sentry plans does it work with?</summary><p>Sentry Team and above, and self-hosted Sentry: any setup that offers custom (internal) integrations. Sentry's free Developer plan lists no third-party integrations.</p></details>
+<details><summary>Does it change anything in Sentry?</summary><p>No. It only receives webhooks. Sentry stays the source of truth.</p></details>
+<details><summary>Will it flood Jira?</summary><p>No: one issue per Sentry issue, throttled repeat comments, and the storm guard caps new issues per hour.</p></details>
+<details><summary>Can I route different Sentry projects to different Jira spaces?</summary><p>Yes, on the Routing tab, by project slug, project ID, project name or alert rule name.</p></details>
+
+<h2 id="data">Data & security</h2>
+<ul>
+<li>Runs on Atlassian (Forge). No outbound network calls; ZCODES has no servers that receive your data.</li>
+<li>Webhooks are verified with HMAC-SHA256 (Sentry) or a private token (others). The secret and token are kept in Forge's encrypted secret storage.</li>
+<li>Stored in your site's app storage: settings, the link between each Sentry issue and Jira issue with a small summary (status, counts, title), and the last 30 activity entries.</li>
+<li>Scopes: read/write Jira work items, read users (only to match a Sentry assignee by email), app storage.</li>
+</ul>
+<p>See <a href="../security.html">Security</a> and <a href="../privacy.html">Privacy</a>.</p>
+</article></main><footer><div class="in"><span>© 2026 ZCODES</span><a href="../privacy.html">Privacy</a><a href="../terms.html">Terms</a>
+      <a href="../security.html">Security</a><a href="../support.html">Support</a><span>Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI.</span></div></footer></body></html>

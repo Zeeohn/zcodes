@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build Beacon for Jira: documentation</title><meta name="description" content="CircleCI builds and deployments on Jira issues."><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet"><link rel="icon" href="../img/zcodes.png"><link rel="stylesheet" href="../style.css"></head>
+<body><header><div class="nav"><a class="brand" href="../index.html"><img src="../img/zcodes.png" alt="">ZCODES</a>
+      <a class="item" href="../error-autopilot/index.html">Error Autopilot</a><a class="item" href="../build-beacon/index.html">Build Beacon</a>
+      <a class="item" href="../support.html">Support</a><a class="item" href="../security.html">Security</a><a class="item" href="../privacy.html">Privacy</a></div></header><main class=""><aside><a href="#overview">Overview</a><a href="#install">Install & connect CircleCI</a><a href="#keys">Linking issues</a><a href="#deployments">Deployments</a><a href="#jql">JQL & Automation</a><a href="#settings">Settings</a><a href="#troubleshooting">Troubleshooting</a><a href="#faq">FAQ</a><a href="#data">Data & security</a></aside><article>
+<div class="hero"><img src="../img/build-beacon.png" alt=""><div><h1>Build Beacon for Jira</h1></div></div>
+<p class="lead">CircleCI builds and deployments on every Jira issue. No orb, no pipeline changes, never fails a build.</p>
+
+<h2 id="overview">Overview</h2>
+<p>Build Beacon listens to CircleCI's outbound webhooks and sends build and deployment information to Jira's <b>Development</b> panel for every issue key found in the branch name or commit message. Because nothing runs inside your pipeline, it can't slow down or fail a build.</p>
+<img class="shot" src="../img/bb-highlight-1.png" alt="Builds from CircleCI on a Jira issue">
+<table><tr><th>Feature</th><th>What it does</th></tr>
+<tr><td>Builds</td><td>Every completed workflow appears under Builds on the linked issues, with status, number, branch and commit.</td></tr>
+<tr><td>Deployments</td><td>Workflows or jobs you map to environments appear under Deployments, the release hub and the deployments timeline.</td></tr>
+<tr><td>Issue keys</td><td>From branch, commit subject and body, in any case (<code>web-42-fix</code> → WEB-42). Tech tokens such as UTF-8 or SHA-256 are ignored.</td></tr>
+<tr><td>JQL</td><td><code>ciStatus</code>, <code>ciFailures</code>, <code>ciBuilds</code>, <code>ciBranch</code>, <code>ciDeployedTo</code>.</td></tr>
+<tr><td>Failure comments</td><td>One comment on the first failure after a pass (or every failure, or never).</td></tr>
+<tr><td>Security</td><td>HMAC-SHA256 signature check; several secrets at once so you can rotate without downtime; duplicate deliveries ignored.</td></tr>
+</table>
+
+<h2 id="install">Install & connect CircleCI</h2>
+<div class="note">You need to be a <b>Jira administrator</b> and a CircleCI <b>organization admin</b> (to add webhooks). Works on all CircleCI cloud plans, including Free.</div>
+<ol>
+  <li>Install Build Beacon from the Atlassian Marketplace, then open <b>Jira settings → Apps → Build Beacon</b>.</li>
+  <li>Copy the <b>Receiver URL</b> on the Connect tab.</li>
+  <li>Choose a secret token (any long random string) and paste it into <b>Webhook secret tokens</b>. Click <b>Save</b>.</li>
+  <li>In CircleCI open <b>Project Settings → Webhooks → Add Webhook</b>:
+    <ul><li>Receiver URL: paste it.</li><li>Secret token: the same token as step 3.</li>
+    <li>Events: <b>Workflow Completed</b> (and <b>Job Completed</b> if you deploy from a job).</li></ul></li>
+  <li>Repeat step 4 for each project. Projects can share the same token.</li>
+  <li>Click <b>Send test build</b> with an existing issue key (e.g. <code>WEB-1</code>), then open that issue → Development → Builds.</li>
+</ol>
+
+<h2 id="keys">Linking issues</h2>
+<p>Put the issue key in the <b>branch name</b> or the <b>commit message</b>:</p>
+<pre><code>git checkout -b web-42-fix-login-redirect
+git commit -m "WEB-42 fix login redirect on Safari"</code></pre>
+<p>Several keys per build are fine. Use <b>Only these Jira space keys</b> to restrict matching, and <b>Ignore branches</b> (default <code>dependabot/*</code>, <code>renovate/*</code>) to skip bots.</p>
+
+<h2 id="deployments">Deployments</h2>
+<p>Map workflow or job names to environments on the Rules tab, one per line:</p>
+<pre><code>deploy-prod=production
+deploy-staging=staging:EU staging
+*-qa=testing</code></pre>
+<p>Patterns without <code>*</code> match anywhere in the name. Types: production, staging, testing, development (anything else is "unmapped"). Tick <b>Job Completed</b> in CircleCI when the deploy happens in a job inside a larger workflow.</p>
+
+<h2 id="jql">JQL & Automation</h2>
+<pre><code>ciStatus = failed
+ciStatus = failed AND ciFailures >= 3
+ciDeployedTo = Production
+ciBranch = "main"</code></pre>
+<p>Because Build Beacon uses Jira's native builds and deployments, Jira Automation triggers such as <b>Build failed</b>, <b>Build successful</b> and <b>Deployment successful</b> work too. Example: when a deployment to Production succeeds, transition the linked issues to Done.</p>
+
+<h2 id="settings">Settings</h2>
+<table><tr><th>Setting</th><th>Default</th><th>Notes</th></tr>
+<tr><td>Webhook secret tokens</td><td>none</td><td>One per line. Add the new token before removing the old one to rotate with no downtime.</td></tr>
+<tr><td>Deployments</td><td>empty</td><td>See above.</td></tr>
+<tr><td>Only these Jira space keys</td><td>any</td><td>Comma separated.</td></tr>
+<tr><td>Ignore branches</td><td>dependabot/*, renovate/*</td><td>Globs, one per line.</td></tr>
+<tr><td>Comment on failure</td><td>First failure after a pass</td><td>Or every failure, or never.</td></tr>
+</table>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Start with the <b>Activity</b> tab: it lists every webhook processed and why it was skipped.</p>
+<details><summary>Nothing appears in Activity</summary><ul>
+<li>The CircleCI webhook URL must match the Receiver URL exactly (reinstalling the app can change it).</li>
+<li>The CircleCI secret token must match one of your saved tokens. Wrong signatures are rejected (HTTP 401).</li>
+<li>Tick <b>Workflow Completed</b> on the CircleCI webhook. Builds are reported when workflows finish, not when they start.</li></ul></details>
+<details><summary>Activity says "no issue keys in branch or commit"</summary><p>Add the key to the branch name or commit message, or check <b>Only these Jira space keys</b>.</p></details>
+<details><summary>Activity says "unknown keys: …"</summary><p>Jira doesn't have issues with those keys (or the app can't see them). Check the key and the space permissions.</p></details>
+<details><summary>Builds don't show on the issue</summary><p>The Development panel is part of Jira software spaces. Check that the issue is in a software space and that you are looking at the issue named in the branch or commit.</p></details>
+<details><summary>Deployments don't show</summary><p>Add an environment rule that matches the workflow or job name. For jobs, tick <b>Job Completed</b> on the CircleCI webhook.</p></details>
+<details><summary>"Subscription inactive" banner</summary><p>The app stops sending builds and deployments when its subscription is inactive. A site admin can renew it in Administration → Apps.</p></details>
+
+<h2 id="faq">FAQ</h2>
+<details><summary>Do I need the CircleCI Jira orb?</summary><p>No. Build Beacon doesn't use the orb or any pipeline step. You can remove the orb if you used it before.</p></details>
+<details><summary>Can it fail or slow my builds?</summary><p>No. CircleCI sends the webhook after the workflow finishes; nothing runs in your pipeline.</p></details>
+<details><summary>Does it work with GitHub, GitLab and Bitbucket projects on CircleCI?</summary><p>Yes. Keys come from CircleCI's own webhook data, whatever the code host.</p></details>
+<details><summary>What about re-runs?</summary><p>A re-run updates the same build number; Jira keeps the latest result.</p></details>
+
+<h2 id="data">Data & security</h2>
+<ul>
+<li>Runs on Atlassian (Forge). No outbound network calls; ZCODES has no servers that receive your data.</li>
+<li>Webhooks are verified with HMAC-SHA256 against your secret tokens, kept in Forge's encrypted secret storage.</li>
+<li>Sent to Jira: workflow and job names, status, pipeline number, branch, commit SHA, repository URL and links. Commit author names and emails are not stored or sent.</li>
+<li>Stored in your site's app storage: settings, recent delivery ids (to ignore duplicates), the last 30 activity entries, and a per-issue build summary (issue property used for JQL).</li>
+<li>Scopes: read/write Jira work items and app storage.</li>
+</ul>
+<p>See <a href="../security.html">Security</a> and <a href="../privacy.html">Privacy</a>.</p>
+</article></main><footer><div class="in"><span>© 2026 ZCODES</span><a href="../privacy.html">Privacy</a><a href="../terms.html">Terms</a>
+      <a href="../security.html">Security</a><a href="../support.html">Support</a><span>Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI.</span></div></footer></body></html>
