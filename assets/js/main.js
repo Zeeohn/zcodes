@@ -1,7 +1,7 @@
 // Entry point. Everything here is progressive enhancement: the page is fully
 // readable before (and without) this script. Heavy WebGL scenes are imported
 // lazily, only when their section approaches the viewport.
-import { reducedMotion, finePointer, hasWebGL, whenIdle } from './util.js';
+import { reducedMotion, finePointer, hasWebGL, whenIdle, motion, setMotionPaused } from './util.js';
 import { initCursor } from './cursor.js';
 import { initCounters } from './counters.js';
 import { initWork } from './work.js';
@@ -14,6 +14,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const NAV_OFFSET = 72;
 
 let lenis = null;
+// We restore scroll ourselves (Lenis + case-study history entries).
+history.scrollRestoration = 'manual';
 
 boot();
 splitHeadline($('.hero-title'));
@@ -22,6 +24,8 @@ initTerminal({ openCase: work.open });
 initCounters();
 initCursor();
 initNav();
+initMotionToggle();
+initCareerCarousel();
 initMagnetic();
 initContact();
 initScenes(work);
@@ -157,8 +161,10 @@ function initNav() {
     const href = a?.getAttribute('href');
     if (!href || href === '#' || href.startsWith('#work/')) return;
     e.preventDefault();
+    // Links inside overlays (e.g. "Hire me" in a case study) close them first.
     if (menu.open) menu.close();
-    goto(href);
+    $$('dialog[open]').forEach((d) => d.dispatchEvent(new Event('cancel', { cancelable: true })));
+    goto(href, a.dataset.focus);
   });
   document.addEventListener('nav:goto', (e) => goto(e.detail.selector, e.detail.focus));
 
@@ -173,6 +179,27 @@ function initNav() {
     menuBtn.setAttribute('aria-expanded', 'false');
     document.dispatchEvent(new Event('overlay:close'));
   });
+}
+
+/* ---------- "Pause animations" (nav + footer buttons) ---------- */
+function initMotionToggle() {
+  const buttons = $$('.motion-toggle');
+  const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(motion.paused)));
+  buttons.forEach((b) => b.addEventListener('click', () => setMotionPaused(!motion.paused)));
+  document.addEventListener('motion:change', sync);
+  sync();
+}
+
+/* ---------- Career on small screens: a swipeable, keyboard-scrollable row ---------- */
+function initCareerCarousel() {
+  const viewport = $('#career .log-viewport');
+  // Only a region that actually scrolls needs to be a tab stop.
+  const sync = () => {
+    const scrolls = viewport.scrollWidth > viewport.clientWidth + 4;
+    if (scrolls) viewport.setAttribute('tabindex', '0');
+    else viewport.removeAttribute('tabindex');
+  };
+  new ResizeObserver(sync).observe(viewport);
 }
 
 /* ---------- Magnetic buttons ---------- */
@@ -307,7 +334,7 @@ async function initMotion() {
       duration: 1,
       ease: 'power3.out',
       delay: (siblings.indexOf(el) % 4) * 0.07,
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      scrollTrigger: { trigger: el, start: 'top 96%', once: true },
     });
   });
 
@@ -317,6 +344,9 @@ async function initMotion() {
     const section = $('#career');
     const log = $('.log', section);
     section.classList.add('is-horizontal');
+    const events = $$('.event', section);
+    const bar = $('.log-bar span', section);
+    const count = $('.log-count', section);
     const distance = () => Math.max(0, log.scrollWidth - innerWidth + parseFloat(getComputedStyle($('.log-viewport', section)).paddingLeft));
     const tween = gsap.to(log, {
       x: () => -distance(),
@@ -328,12 +358,20 @@ async function initMotion() {
         end: () => `+=${distance()}`,
         scrub: 0.6,
         invalidateOnRefresh: true,
+        onUpdate: ({ progress }) => {
+          // Progress bar plus the offset of the event nearest the reading line.
+          bar.style.transform = `scaleX(${progress.toFixed(3)})`;
+          const i = Math.round(progress * (events.length - 1));
+          count.textContent = `offset ${events[i].querySelector('.offset').textContent}`;
+          events.forEach((ev, k) => ev.classList.toggle('is-current', k === i));
+        },
       },
     });
     return () => {
       tween.scrollTrigger.kill();
       tween.kill();
       gsap.set(log, { clearProps: 'transform' });
+      events.forEach((ev) => ev.classList.remove('is-current'));
       section.classList.remove('is-horizontal');
     };
   });

@@ -13,6 +13,16 @@ export function initWork() {
   const dialog = document.querySelector('#case-dialog');
   const bySlug = Object.fromEntries(cards.map((c) => [c.dataset.slug, c]));
 
+  // ---- Surface each project's stack on its card (the full case study opens in the overlay)
+  cards.forEach((card) => {
+    const chips = card.querySelector('.case .chips');
+    if (!chips) return;
+    const stack = chips.cloneNode(true);
+    stack.className = 'chips card-stack';
+    stack.setAttribute('aria-label', 'Stack');
+    card.querySelector('.card-actions').before(stack);
+  });
+
   // ---- Filters
   const chips = section.querySelectorAll('[data-filter]');
   chips.forEach((chip) => chip.addEventListener('click', () => {

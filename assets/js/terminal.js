@@ -2,7 +2,8 @@
 // the page itself (cards, event log, skill list) so it never drifts from it.
 
 const EMAIL = 'successzion21@gmail.com';
-const COMMANDS = ['help', 'whoami', 'ls projects', 'cat experience', 'skills', 'contact', 'hire', 'sudo hire-zion', 'open', 'clear', 'exit'];
+const COMMANDS = ['help', 'whoami', 'ls projects', 'cat experience', 'skills', 'contact', 'hire', 'sudo hire-zion', 'open', 'shortcut on', 'shortcut off', 'clear', 'exit'];
+const SHORTCUT_KEY = 'zs-shortcut';
 
 export function initTerminal({ openCase }) {
   const dialog = document.querySelector('#terminal');
@@ -48,6 +49,7 @@ export function initTerminal({ openCase }) {
           'contact           how to reach me',
           'hire              jump to the request form',
           'sudo hire-zion    you know you want to',
+          'shortcut on|off   enable or disable the ` key shortcut',
           'clear · exit      tidy up · close (or press Esc)',
         ].join('\n'), 't-dim');
         return;
@@ -88,6 +90,11 @@ export function initTerminal({ openCase }) {
       case 'sudo hire-zion':
         print('[sudo] password for recruiter: ********', 't-dim');
         print('✔ permission granted. Provisioning senior engineer…\n✔ kafka topic "your-team" created\n✔ zion joined consumer group "your-team"\n201 Created. One last step: run `hire` (or email ' + EMAIL + ') so it reaches a real inbox.', 't-ok');
+        return;
+      case 'shortcut on':
+      case 'shortcut off':
+        setShortcut(cmd.endsWith('on'));
+        print(`backtick shortcut ${shortcutOn ? 'enabled' : 'disabled'}.`, 't-ok');
         return;
       case 'clear':
         out.replaceChildren();
@@ -188,9 +195,29 @@ export function initTerminal({ openCase }) {
     document.querySelector('#menu')?.close();
     open();
   }));
+  // Single-key shortcuts must be switchable off (WCAG 2.1.4): footer toggle or `shortcut off`.
+  const toggle = document.querySelector('.shortcut-toggle');
+  let shortcutOn = true;
+  try {
+    shortcutOn = localStorage.getItem(SHORTCUT_KEY) !== 'off';
+  } catch {
+    /* storage blocked: default on */
+  }
+  function setShortcut(on) {
+    shortcutOn = on;
+    toggle.setAttribute('aria-pressed', String(on));
+    try {
+      localStorage.setItem(SHORTCUT_KEY, on ? 'on' : 'off');
+    } catch {
+      /* private mode: applies to this visit only */
+    }
+  }
+  toggle.setAttribute('aria-pressed', String(shortcutOn));
+  toggle.addEventListener('click', () => setShortcut(!shortcutOn));
+
   // Backtick opens it from anywhere except while typing or inside another dialog.
   document.addEventListener('keydown', (e) => {
-    if (e.key !== '`' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!shortcutOn || e.key !== '`' || e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target;
     if (t.closest?.('input, textarea, [contenteditable], dialog[open]')) return;
     e.preventDefault();

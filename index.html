@@ -28,6 +28,7 @@
   (function (h) {
     h.classList.add('js');
     try {
+      if (localStorage.getItem('zs-motion') === 'paused') h.classList.add('motion-paused');
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('zs-booted')) {
         sessionStorage.setItem('zs-booted', '1');
         h.classList.add('boot');
@@ -101,10 +102,14 @@
       <span class="nav-indicator" aria-hidden="true"></span>
     </nav>
     <div class="nav-actions">
+      <button class="icon-btn motion-toggle" type="button" aria-pressed="false" aria-label="Pause animations">
+        <svg class="i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <svg class="i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5l12 7-12 7z" fill="currentColor"/></svg>
+      </button>
       <button class="icon-btn term-open" type="button" aria-label="Open terminal (shortcut: backtick)">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 6l6 6-6 6M12 18h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <a class="btn btn-small" href="mailto:successzion21@gmail.com?subject=Hiring%20Zion" data-magnetic>Hire me</a>
+      <a class="btn btn-small nav-hire" href="#contact" data-focus="#f-name" data-magnetic>Hire me</a>
       <button class="icon-btn menu-open" type="button" aria-label="Open menu" aria-controls="menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 8h16M4 16h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
@@ -128,6 +133,7 @@
         <li style="--i:6"><a href="#contact"><span>07</span>Contact</a></li>
       </ol>
     </nav>
+    <p class="menu-hire"><a class="btn" href="#contact" data-focus="#f-name">Hire me <span aria-hidden="true">→</span></a></p>
     <p class="menu-foot"><button type="button" class="link-btn term-open">Open the terminal</button> · <a href="mailto:successzion21@gmail.com">successzion21@gmail.com</a></p>
   </div>
 </dialog>
@@ -155,13 +161,20 @@
           <p class="section-label">00 / hello</p>
           <h1 class="hero-title" id="hero-title">I build systems that <em>don't go down.</em></h1>
           <p class="hero-sub">Zion Success · Senior Full-Stack Engineer · 6+ years · Node.js · TypeScript · React · Microservices · Real-time</p>
+          <ul class="proof" aria-label="At a glance">
+            <li><b>99%</b> availability</li>
+            <li><b>5,000+</b> daily active users</li>
+            <li><b>&lt;1s</b> real-time latency</li>
+            <li><b>Abuja</b> remote · WAT (UTC+1)</li>
+          </ul>
           <div class="hero-ctas">
             <a class="btn" href="#work" data-magnetic>See my work <span aria-hidden="true">↓</span></a>
-            <a class="btn btn-ghost" href="mailto:successzion21@gmail.com?subject=Hiring%20Zion" data-magnetic>Hire me</a>
+            <a class="btn btn-ghost" href="#contact" data-focus="#f-name" data-magnetic>Hire me</a>
           </div>
-          <p class="cli-teaser">Prefer a CLI? Press <kbd>`</kbd> <button type="button" class="link-btn term-open">or open the terminal</button></p>
+          <p class="cli-teaser"><a href="https://github.com/Zeeohn" rel="me noopener" target="_blank">GitHub<span class="sr-only"> (opens in a new tab)</span> ↗</a> · Prefer a CLI? Press <kbd>`</kbd> <button type="button" class="link-btn term-open">or open the terminal</button></p>
         </div>
         <p class="scroll-cue" aria-hidden="true"><span></span>scroll to deploy</p>
+        <p class="hero-handoff mono" aria-hidden="true"><span class="ok">●</span> deploying 10 services <span class="dim">→ 01 / system</span></p>
       </div>
     </div>
   </section>
@@ -239,13 +252,15 @@
         <p class="section-label">03 / career</p>
         <h2 id="career-title">Career, as an event log.</h2>
         <p class="topic mono"><span>topic: <b>career</b></span><span>partitions: 1</span><span>7 events</span><span>retention: forever</span></p>
+        <p class="log-progress mono" aria-hidden="true"><span class="log-bar"><span></span></span><span class="log-count">offset #0007</span></p>
       </div>
-      <div class="log-viewport">
+      <div class="log-viewport" role="region" aria-label="Career event log">
         <ol class="log">
           <li class="event">
             <article>
               <p class="event-head mono"><span class="offset">#0007</span><span>Sep 2025 – 2026</span></p>
               <h3>Ellucian <span class="tag">Contract</span></h3>
+              <p class="event-metric">−80% custom dev &amp; maintenance</p>
               <p class="event-role">Senior SaaS Extensibility Consultant</p>
               <p class="event-place"><span aria-hidden="true">🇺🇸</span> Virginia, United States · Remote</p>
               <ul class="event-points">
@@ -260,6 +275,7 @@
             <article>
               <p class="event-head mono"><span class="offset">#0006</span><span>Nov 2024 – Jul 2025</span></p>
               <h3>Unânime Planet <span class="tag">Contract</span></h3>
+              <p class="event-metric">99% availability</p>
               <p class="event-role">Full Stack Software Engineer</p>
               <p class="event-place"><span aria-hidden="true">🇵🇹</span> Aveiro, Portugal · Remote</p>
               <ul class="event-points">
@@ -274,6 +290,7 @@
             <article>
               <p class="event-head mono"><span class="offset">#0005</span><span>Sep 2024 – Nov 2024</span></p>
               <h3>Jointly Proptech <span class="tag">Contract</span></h3>
+              <p class="event-metric">80% of pending features shipped in month one</p>
               <p class="event-role">Senior Backend Engineer</p>
               <p class="event-place"><span aria-hidden="true">🇳🇬</span> Lagos, Nigeria · Remote</p>
               <ul class="event-points">
@@ -288,6 +305,7 @@
             <article>
               <p class="event-head mono"><span class="offset">#0004</span><span>Oct 2023 – Sep 2024</span></p>
               <h3>KaiFinance <span class="tag">Full-time</span></h3>
+              <p class="event-metric">−65% critical incidents</p>
               <p class="event-role">Lead Backend Engineer <span class="muted">· formerly Koboaccountant Africa</span></p>
               <p class="event-place"><span aria-hidden="true">🇷🇼</span> Kigali, Rwanda · Remote</p>
               <ul class="event-points">
@@ -302,6 +320,7 @@
             <article>
               <p class="event-head mono"><span class="offset">#0003</span><span>Feb 2023 – Dec 2023</span></p>
               <h3>BeastMood Entertainment <span class="tag">Contract</span></h3>
+              <p class="event-metric">10,000+ titles aggregated</p>
               <p class="event-role">Fullstack Developer</p>
               <p class="event-place"><span aria-hidden="true">🇫🇷</span> Paris, France · Remote</p>
               <ul class="event-points">
@@ -316,6 +335,7 @@
             <article>
               <p class="event-head mono"><span class="offset">#0002</span><span>Jan 2022 – Mar 2023</span></p>
               <h3>Ekoverse Technologies <span class="tag">Contract</span></h3>
+              <p class="event-metric">5,000+ daily active users</p>
               <p class="event-role">Lead Full Stack Developer</p>
               <p class="event-place"><span aria-hidden="true">🇳🇬</span> Lagos, Nigeria · Remote</p>
               <ul class="event-points">
@@ -330,6 +350,7 @@
             <article>
               <p class="event-head mono"><span class="offset">#0001</span><span>Feb 2019 – Jan 2022</span></p>
               <h3>Freelance</h3>
+              <p class="event-metric">10+ apps deployed &amp; secured</p>
               <p class="event-role">Fullstack Developer</p>
               <p class="event-place"><span aria-hidden="true">🌍</span> Remote</p>
               <ul class="event-points">
@@ -399,7 +420,7 @@
             <h3>Error Autopilot for Jira</h3>
             <p>Sentry alerts become Jira issues automatically, without Sentry's Business plan. Stack traces, sync, escalation of recurring errors and JQL on Sentry data.</p>
             <p class="status status-review">Submitted to the Atlassian Marketplace (in review)</p>
-            <p class="card-actions"><a class="card-open" href="#work/error-autopilot" data-cursor="view">Case study<span class="sr-only">: Error Autopilot for Jira</span></a><a class="card-ext" href="error-autopilot/index.html">Documentation<span class="sr-only"> for Error Autopilot</span> →</a></p>
+            <p class="card-actions"><a class="card-open" href="#work/error-autopilot" data-cursor="view">Read the case study<span class="sr-only">: Error Autopilot for Jira</span></a><a class="card-ext" href="error-autopilot/index.html">Documentation<span class="sr-only"> for Error Autopilot</span> →</a></p>
           </div>
           <div class="case" id="work/error-autopilot">
             <h4>Problem</h4>
@@ -424,7 +445,7 @@
             <h3>Build Beacon for Jira</h3>
             <p>CircleCI builds and deployments on every Jira issue. No orb, no pipeline changes, never fails a build. JQL for build health.</p>
             <p class="status status-review">Submitted to the Atlassian Marketplace (in review)</p>
-            <p class="card-actions"><a class="card-open" href="#work/build-beacon" data-cursor="view">Case study<span class="sr-only">: Build Beacon for Jira</span></a><a class="card-ext" href="build-beacon/index.html">Documentation<span class="sr-only"> for Build Beacon</span> →</a></p>
+            <p class="card-actions"><a class="card-open" href="#work/build-beacon" data-cursor="view">Read the case study<span class="sr-only">: Build Beacon for Jira</span></a><a class="card-ext" href="build-beacon/index.html">Documentation<span class="sr-only"> for Build Beacon</span> →</a></p>
           </div>
           <div class="case" id="work/build-beacon">
             <h4>Problem</h4>
@@ -449,7 +470,7 @@
             <p class="card-kicker">Client work · KaiFinance</p>
             <h3>Accounting platform → microservices</h3>
             <ul class="metrics"><li>−25% query time</li><li>−65% critical incidents</li><li>−40% deploy time</li><li>Socket.io &lt;1s</li></ul>
-            <p class="card-actions"><a class="card-open" href="#work/kaifinance-microservices" data-cursor="view">Case study<span class="sr-only">: Accounting platform to microservices</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/kaifinance-microservices" data-cursor="view">Read the case study<span class="sr-only">: Accounting platform to microservices</span></a></p>
           </div>
           <div class="case" id="work/kaifinance-microservices">
             <h4>Problem</h4>
@@ -471,7 +492,7 @@
             <p class="card-kicker">Client work · KaiFinance</p>
             <h3>File management on Google Drive</h3>
             <ul class="metrics"><li>1,000+ users</li><li>Real-time scheduling</li></ul>
-            <p class="card-actions"><a class="card-open" href="#work/drive-file-management" data-cursor="view">Case study<span class="sr-only">: File management on Google Drive</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/drive-file-management" data-cursor="view">Read the case study<span class="sr-only">: File management on Google Drive</span></a></p>
           </div>
           <div class="case" id="work/drive-file-management">
             <h4>Problem</h4>
@@ -493,7 +514,7 @@
             <p class="card-kicker">Client work · Ekoverse Technologies</p>
             <h3>Social platform at scale</h3>
             <ul class="metrics"><li>5,000+ DAU</li><li>Thousands concurrent</li><li>+30% uptime</li></ul>
-            <p class="card-actions"><a class="card-open" href="#work/social-platform" data-cursor="view">Case study<span class="sr-only">: Social platform at scale</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/social-platform" data-cursor="view">Read the case study<span class="sr-only">: Social platform at scale</span></a></p>
           </div>
           <div class="case" id="work/social-platform">
             <h4>Problem</h4>
@@ -515,7 +536,7 @@
             <p class="card-kicker">Client work · BeastMood Entertainment</p>
             <h3>Manga aggregator</h3>
             <ul class="metrics"><li>10,000+ titles</li><li>−50% response time</li><li>Auth 50% faster</li></ul>
-            <p class="card-actions"><a class="card-open" href="#work/manga-aggregator" data-cursor="view">Case study<span class="sr-only">: Manga aggregator</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/manga-aggregator" data-cursor="view">Read the case study<span class="sr-only">: Manga aggregator</span></a></p>
           </div>
           <div class="case" id="work/manga-aggregator">
             <h4>Problem</h4>
@@ -537,7 +558,7 @@
             <p class="card-kicker">Client work · Unânime Planet</p>
             <h3>3 dashboards in 2 weeks + microservices migration</h3>
             <ul class="metrics"><li>99% availability</li><li>+50% team productivity</li></ul>
-            <p class="card-actions"><a class="card-open" href="#work/dashboards-microservices" data-cursor="view">Case study<span class="sr-only">: 3 dashboards in 2 weeks and a microservices migration</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/dashboards-microservices" data-cursor="view">Read the case study<span class="sr-only">: 3 dashboards in 2 weeks and a microservices migration</span></a></p>
           </div>
           <div class="case" id="work/dashboards-microservices">
             <h4>Problem</h4>
@@ -559,7 +580,7 @@
             <p class="card-kicker">Client work · Ellucian</p>
             <h3>University SaaS extensibility</h3>
             <ul class="metrics"><li>−80% custom dev &amp; maintenance</li><li>Integration blueprints</li></ul>
-            <p class="card-actions"><a class="card-open" href="#work/university-extensibility" data-cursor="view">Case study<span class="sr-only">: University SaaS extensibility</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/university-extensibility" data-cursor="view">Read the case study<span class="sr-only">: University SaaS extensibility</span></a></p>
           </div>
           <div class="case" id="work/university-extensibility">
             <h4>Problem</h4>
@@ -583,7 +604,7 @@
             <h3>Prediction-market liquidity engine</h3>
             <ul class="metrics"><li>27 unit tests</li><li>Kill switch</li></ul>
             <p class="status status-lab">Private research</p>
-            <p class="card-actions"><a class="card-open" href="#work/liquidity-engine" data-cursor="view">Case study<span class="sr-only">: Prediction-market liquidity engine</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/liquidity-engine" data-cursor="view">Read the case study<span class="sr-only">: Prediction-market liquidity engine</span></a></p>
           </div>
           <div class="case" id="work/liquidity-engine">
             <h4>Problem</h4>
@@ -606,7 +627,7 @@
             <h3>Non-custodial TRON energy service</h3>
             <ul class="metrics"><li>23 unit tests</li><li>Never holds funds</li></ul>
             <p class="status status-lab">In development</p>
-            <p class="card-actions"><a class="card-open" href="#work/tron-energy" data-cursor="view">Case study<span class="sr-only">: Non-custodial TRON energy service</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/tron-energy" data-cursor="view">Read the case study<span class="sr-only">: Non-custodial TRON energy service</span></a></p>
           </div>
           <div class="case" id="work/tron-energy">
             <h4>Problem</h4>
@@ -629,7 +650,7 @@
             <h3>Telegram Gift Radar</h3>
             <ul class="metrics"><li>13 unit tests</li><li>Below-floor alerts</li></ul>
             <p class="status status-lab">Launching soon</p>
-            <p class="card-actions"><a class="card-open" href="#work/gift-radar" data-cursor="view">Case study<span class="sr-only">: Telegram Gift Radar</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/gift-radar" data-cursor="view">Read the case study<span class="sr-only">: Telegram Gift Radar</span></a></p>
           </div>
           <div class="case" id="work/gift-radar">
             <h4>Problem</h4>
@@ -652,7 +673,7 @@
             <h3>Anti-phishing Chrome extension</h3>
             <ul class="metrics"><li>Final-year project</li></ul>
             <p class="status status-lab">Final project · 2023</p>
-            <p class="card-actions"><a class="card-open" href="#work/anti-phishing" data-cursor="view">Case study<span class="sr-only">: Anti-phishing Chrome extension</span></a></p>
+            <p class="card-actions"><a class="card-open" href="#work/anti-phishing" data-cursor="view">Read the case study<span class="sr-only">: Anti-phishing Chrome extension</span></a></p>
           </div>
           <div class="case" id="work/anti-phishing">
             <h4>Problem</h4>
@@ -668,6 +689,7 @@
           </div>
         </article>
       </div>
+      <p class="work-cta" data-reveal><span>Need a system like these, built to stay up?</span> <a class="btn" href="#contact" data-focus="#f-name" data-magnetic>Hire me <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
 
@@ -713,7 +735,7 @@
           <li><a href="https://linkedin.com/in/zcodes" rel="me noopener" target="_blank">LinkedIn<span class="sr-only"> (opens in a new tab)</span> ↗</a></li>
           <li><a href="mailto:successzion21@gmail.com">Email ↗</a></li>
         </ul>
-        <p class="cli-teaser">Prefer a CLI? Press <kbd>`</kbd> and type <code>hire</code>.</p>
+        <p class="cli-teaser">Prefer a CLI? Press <kbd>`</kbd> (or use the nav terminal button) and type <code>hire</code>.</p>
       </div>
 
       <form class="api" id="hire-form" action="mailto:successzion21@gmail.com" method="post" enctype="text/plain" data-reveal>
@@ -764,6 +786,13 @@
       <h2 class="footer-h">Company</h2>
       <ul><li><a href="support.html">Support</a></li><li><a href="security.html">Security</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul>
     </nav>
+    <div class="prefs">
+      <h2 class="footer-h">Preferences</h2>
+      <ul>
+        <li><button type="button" class="link-btn motion-toggle" aria-pressed="false">Pause animations</button></li>
+        <li><button type="button" class="link-btn shortcut-toggle" aria-pressed="true">Backtick (`) terminal shortcut</button></li>
+      </ul>
+    </div>
     <p class="footer-note">Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI. No cookies, no trackers.</p>
   </div>
 </footer>
@@ -778,6 +807,7 @@
     <p class="case-kicker mono"></p>
     <h2 id="case-title"></h2>
     <div class="case-content"></div>
+    <p class="case-cta"><a class="btn" href="#contact" data-focus="#f-name">Hire me for work like this <span aria-hidden="true">→</span></a> <a class="link-btn" href="mailto:successzion21@gmail.com">or email me</a></p>
   </div>
 </dialog>
 
