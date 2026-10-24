@@ -1,24 +1,834 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZCODES: Jira apps for developer teams</title><meta name="description" content="ZCODES builds Jira Cloud apps that connect developer tools to Jira."><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet"><link rel="icon" href="img/zcodes.png"><link rel="stylesheet" href="style.css"></head>
-<body><header><div class="nav"><a class="brand" href="index.html"><img src="img/zcodes.png" alt="">ZCODES</a>
-      <a class="item" href="error-autopilot/index.html">Error Autopilot</a><a class="item" href="build-beacon/index.html">Build Beacon</a>
-      <a class="item" href="support.html">Support</a><a class="item" href="security.html">Security</a><a class="item" href="privacy.html">Privacy</a></div></header><main class="single"><article>
-<h1>Jira apps that do the busywork for developers</h1>
-<p class="lead">ZCODES builds focused Jira Cloud apps that turn signals from the developer tools you already use into tracked, searchable Jira work. Every app runs entirely on Atlassian's Forge platform.</p>
-<div class="grid">
-  <div class="cardx"><img src="img/error-autopilot.png" alt=""><h3>Error Autopilot for Jira</h3>
-    <p>Sentry alerts become Jira issues automatically, without Sentry's Business plan. Stack traces, sync, escalation of recurring errors and JQL on Sentry data.</p>
-    <a href="error-autopilot/index.html">Documentation →</a></div>
-  <div class="cardx"><img src="img/build-beacon.png" alt=""><h3>Build Beacon for Jira</h3>
-    <p>CircleCI builds and deployments on every Jira issue. No orb, no pipeline changes, never fails a build. JQL for build health.</p>
-    <a href="build-beacon/index.html">Documentation →</a></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zion Success — Senior Full-Stack Engineer · ZCODES</title>
+<meta name="description" content="Zion Success: senior full-stack engineer and founder of ZCODES. 6+ years building real-time, distributed systems that stay up with Node.js, TypeScript, React and microservices.">
+<link rel="canonical" href="https://zeeohn.github.io/zcodes/">
+<meta name="theme-color" content="#0B1220">
+<meta name="color-scheme" content="dark">
+<meta name="author" content="Zion Success">
+<link rel="icon" href="img/zcodes.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ZCODES">
+<meta property="og:url" content="https://zeeohn.github.io/zcodes/">
+<meta property="og:title" content="Zion Success — Senior Full-Stack Engineer · ZCODES">
+<meta property="og:description" content="I build systems that don't go down. Node.js · TypeScript · React · Microservices · Real-time.">
+<meta property="og:image" content="https://zeeohn.github.io/zcodes/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Zion Success, Senior Full-Stack Engineer, with the ZCODES Z mark">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Zion Success — Senior Full-Stack Engineer · ZCODES">
+<meta name="twitter:description" content="I build systems that don't go down. Node.js · TypeScript · React · Microservices · Real-time.">
+<meta name="twitter:image" content="https://zeeohn.github.io/zcodes/assets/img/og.png">
+<script>
+  /* Runs before first paint: flags JS support and decides whether the boot preloader plays (once per session, never with reduced motion). */
+  (function (h) {
+    h.classList.add('js');
+    try {
+      if (localStorage.getItem('zs-motion') === 'paused') h.classList.add('motion-paused');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('zs-booted')) {
+        sessionStorage.setItem('zs-booted', '1');
+        h.classList.add('boot');
+      }
+    } catch (e) {}
+  })(document.documentElement);
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"></noscript>
+<link rel="stylesheet" href="assets/css/portfolio.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+    "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/+esm",
+    "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/ScrollTrigger.js/+esm",
+    "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.mjs",
+    "topojson-client": "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm"
+  }
+}
+</script>
+<script type="module" src="assets/js/main.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Zion Success",
+  "jobTitle": "Senior Full-Stack Software Engineer",
+  "url": "https://zeeohn.github.io/zcodes/",
+  "image": "https://zeeohn.github.io/zcodes/assets/img/og.png",
+  "email": "mailto:successzion21@gmail.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "Abuja", "addressCountry": "NG" },
+  "knowsLanguage": ["English", "French"],
+  "sameAs": ["https://github.com/Zeeohn", "https://linkedin.com/in/zcodes"],
+  "worksFor": { "@type": "Organization", "name": "ZCODES", "url": "https://zeeohn.github.io/zcodes/" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Ilorin" }
+}
+</script>
+</head>
+<body data-tone="brand">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Boot preloader: pure CSS timeline (≤1.2s) so it never waits on the network; main.js only handles "skip". -->
+<div class="preloader" aria-hidden="true">
+  <div class="preloader-term">
+    <p style="--i:0"><span class="ok">[ok]</span> kafka.connect <span class="dim">brokers=3</span></p>
+    <p style="--i:1"><span class="ok">[ok]</span> redis.cache warm <span class="dim">hit=0.98</span></p>
+    <p style="--i:2"><span class="ok">[ok]</span> socket.io handshake <span class="dim">&lt;1s</span></p>
+    <p style="--i:3"><span class="ok">[ok]</span> postgres.pool ready <span class="dim">n=20</span></p>
+    <p style="--i:4"><span class="ok">[ok]</span> zion-success v6.0 ready</p>
+  </div>
+  <p class="preloader-hint">click or press any key to skip</p>
 </div>
-<h2>How we build</h2>
-<ul>
-  <li><b>Runs on Atlassian.</b> Our apps run on Atlassian's infrastructure and make no outbound network calls. Your data stays in your Atlassian site.</li>
-  <li><b>Verified inputs.</b> Every incoming webhook is checked (HMAC signatures or a private token) before anything happens.</li>
-  <li><b>Minutes to set up.</b> Each app has a built-in test button so you can see it working before you rely on it.</li>
-</ul>
-<p>Questions? <a href="support.html">Contact support</a>.</p>
-</article></main><footer><div class="in"><span>© 2026 ZCODES</span><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
-      <a href="security.html">Security</a><a href="support.html">Support</a><span>Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI.</span></div></footer></body></html>
+
+<div class="backdrop" aria-hidden="true"><span class="tone tone-brand"></span><span class="tone tone-cool"></span><span class="tone tone-warm"></span></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" aria-label="ZCODES, back to top"><span class="mark" aria-hidden="true"></span><span class="brand-word">ZCODES</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#system">System</a>
+      <a href="#impact">Impact</a>
+      <a href="#career">Career</a>
+      <a href="#remote">Remote</a>
+      <a href="#work">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <span class="nav-indicator" aria-hidden="true"></span>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn motion-toggle" type="button" aria-pressed="false" aria-label="Pause animations">
+        <svg class="i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <svg class="i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5l12 7-12 7z" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn term-open" type="button" aria-label="Open terminal (shortcut: backtick)">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 6l6 6-6 6M12 18h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <a class="btn btn-small nav-hire" href="#contact" data-focus="#f-name" data-magnetic>Hire me</a>
+      <button class="icon-btn menu-open" type="button" aria-label="Open menu" aria-controls="menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 8h16M4 16h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="menu" id="menu" aria-label="Menu" data-lenis-prevent>
+  <div class="menu-in">
+    <button class="icon-btn menu-close" type="button" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <nav aria-label="Sections (menu)">
+      <ol class="menu-links">
+        <li style="--i:0"><a href="#system"><span>01</span>System</a></li>
+        <li style="--i:1"><a href="#impact"><span>02</span>Impact</a></li>
+        <li style="--i:2"><a href="#career"><span>03</span>Career</a></li>
+        <li style="--i:3"><a href="#remote"><span>04</span>Remote</a></li>
+        <li style="--i:4"><a href="#work"><span>05</span>Work</a></li>
+        <li style="--i:5"><a href="#skills"><span>06</span>Skills</a></li>
+        <li style="--i:6"><a href="#contact"><span>07</span>Contact</a></li>
+      </ol>
+    </nav>
+    <p class="menu-hire"><a class="btn" href="#contact" data-focus="#f-name">Hire me <span aria-hidden="true">→</span></a></p>
+    <p class="menu-foot"><button type="button" class="link-btn term-open">Open the terminal</button> · <a href="mailto:successzion21@gmail.com">successzion21@gmail.com</a></p>
+  </div>
+</dialog>
+
+<main id="main">
+
+  <!-- 00 · HERO -->
+  <section class="hero" id="top" aria-labelledby="hero-title" data-tone="brand">
+    <div class="hero-track">
+      <div class="hero-stage">
+        <div class="hero-canvas" data-scene="hero">
+          <canvas aria-hidden="true"></canvas>
+          <!-- Static fallback when WebGL is unavailable -->
+          <div class="hero-fallback" aria-hidden="true"><span class="mark mark-xl"></span></div>
+        </div>
+        <div class="wrap hero-copy">
+          <div class="hero-meta">
+            <div class="avatar" aria-hidden="true">
+              <!-- To use a photo: add assets/me.jpg and replace the monogram span with
+                   <img src="assets/me.jpg" alt="" width="160" height="160"> -->
+              <span class="avatar-mono">ZS</span>
+            </div>
+            <p class="pill"><span class="pulse" aria-hidden="true"></span>Available for remote contracts</p>
+          </div>
+          <p class="section-label">00 / hello</p>
+          <h1 class="hero-title" id="hero-title">I build systems<br> that <em>don't go<br> down.</em></h1>
+          <p class="hero-sub">Zion Success · Senior Full-Stack Engineer · 6+ years · Node.js · TypeScript · React · Microservices · Real-time</p>
+          <ul class="proof" aria-label="At a glance">
+            <li><b>99%</b> availability</li>
+            <li><b>5,000+</b> daily active users</li>
+            <li><b>&lt;1s</b> real-time latency</li>
+            <li><b>Abuja</b> remote · WAT (UTC+1)</li>
+          </ul>
+          <div class="hero-ctas">
+            <a class="btn" href="#work" data-magnetic>See my work <span aria-hidden="true">↓</span></a>
+            <a class="btn btn-ghost" href="#contact" data-focus="#f-name" data-magnetic>Hire me</a>
+          </div>
+          <p class="cli-teaser"><a href="https://github.com/Zeeohn" rel="me noopener" target="_blank">GitHub<span class="sr-only"> (opens in a new tab)</span> ↗</a> · Prefer a CLI? Press <kbd>`</kbd> <button type="button" class="link-btn term-open">or open the terminal</button></p>
+        </div>
+        <p class="scroll-cue" aria-hidden="true"><span></span>scroll to deploy</p>
+        <p class="hero-handoff mono" aria-hidden="true"><span class="ok">●</span> deploying 10 services <span class="dim">→ 01 / system</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 · SYSTEM / ABOUT -->
+  <section class="section system" id="system" aria-labelledby="system-title" data-tone="cool">
+    <div class="wrap system-grid">
+      <div class="system-copy" data-reveal>
+        <p class="section-label">01 / system</p>
+        <h2 id="system-title">Every service I touch stays up.</h2>
+        <p class="bio">Senior Full-Stack Software Engineer with 6+ years building scalable, high-performance web applications with TypeScript, Node.js, React/Next.js, MongoDB and PostgreSQL. I design microservices, APIs, secure authentication and real-time systems (Redis, Kafka) that ship to production and stay up: 50% faster integration delivery, 99% availability, 40% faster deployments.</p>
+        <p class="bio">I care about measurable impact, code quality and mentoring engineers, and I ship reliably in fast-paced teams. Through ZCODES I also build my own products: Productivity Software Suites, Jira Cloud apps on Atlassian Forge, plus automation and on-chain (Blockchain) tooling.</p>
+        <dl class="facts">
+          <div><dt>Based</dt><dd>Abuja, Nigeria · working remotely worldwide</dd></div>
+          <div><dt>Languages</dt><dd>English, French</dd></div>
+          <div><dt>Education</dt><dd>Bachelor's Degree, University of Ilorin (Oct 2018 – Oct 2023). Final project: a Chrome extension that prevents phishing attacks on the university's undergraduate portal.</dd></div>
+          <div><dt>Building</dt><dd>ZCODES</dd></div>
+        </dl>
+      </div>
+      <div class="system-viz" data-scene="network">
+        <canvas aria-hidden="true"></canvas>
+        <div class="node-labels"></div>
+        <div class="hud" aria-hidden="true">
+          <p><span class="hud-k">msgs delivered:</span> <span class="hud-msgs">1,204,553</span> <span class="up">↑</span></p>
+          <p><span class="hud-k">p99 latency:</span> <span class="hud-p99">0.8s</span></p>
+          <p class="hud-note">// simulated telemetry</p>
+        </div>
+        <h3 class="sr-only">The stack, and where I used it</h3>
+        <ul class="node-list">
+          <li data-node="gateway" data-pos="0,1.55,0.2" data-color="#8B8CF0"><b>API Gateway</b><span>Service edges and scalable REST APIs at KaiFinance, Unânime Planet and Ekoverse.</span></li>
+          <li data-node="auth" data-pos="-1.85,0.85,0.5" data-color="#F2555A"><b>Auth (JWT)</b><span>JWT-based access control at BeastMood Entertainment: authentication 50% faster.</span></li>
+          <li data-node="graphql" data-pos="1.85,0.9,-0.3" data-color="#C084FC"><b>GraphQL</b><span>Data integration pipelines and connectors at Ellucian.</span></li>
+          <li data-node="socketio" data-pos="-0.95,0.15,1.25" data-color="#E6EAF2"><b>Socket.io</b><span>Real-time communication under 1s at KaiFinance.</span></li>
+          <li data-node="kafka" data-pos="0.15,-0.05,-0.15" data-color="#7C3AED"><b>Kafka</b><span>Real-time notification services and inter-service communication at Unânime Planet.</span></li>
+          <li data-node="redis" data-pos="1.35,-0.35,1.05" data-color="#F2555A"><b>Redis</b><span>Inter-service communication at Unânime Planet; caching at BeastMood (−50% response times).</span></li>
+          <li data-node="postgres" data-pos="-1.55,-1.2,-0.45" data-color="#2563EB"><b>PostgreSQL</b><span>Data integration pipelines and connectors at Ellucian.</span></li>
+          <li data-node="mongodb" data-pos="0.55,-1.45,0.65" data-color="#0EA5A4"><b>MongoDB</b><span>Node.js, Express.js and MongoDB server-side systems at Jointly Proptech.</span></li>
+          <li data-node="cicd" data-pos="-2.45,-0.35,-1.2" data-color="#5B5BD6"><b>CI/CD</b><span>GitHub Actions and Docker at KaiFinance: deployment time −40%.</span></li>
+          <li data-node="aws" data-pos="2.35,-1.05,-1.0" data-color="#0EA5A4"><b>AWS</b><span>CI/CD on AWS at KaiFinance; 10+ apps deployed and secured on AWS and DigitalOcean as a freelancer.</span></li>
+        </ul>
+        <p class="node-inspector" aria-live="polite"><span class="mono">inspect:</span> hover or focus a node to see where it ran in production.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · IMPACT -->
+  <section class="section impact" id="impact" aria-labelledby="impact-title" data-tone="brand">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="section-label">02 / impact</p>
+        <h2 id="impact-title">Numbers that shipped to production.</h2>
+      </div>
+      <ul class="stats">
+        <li class="stat" data-reveal><p class="stat-num"><span class="counter">80%</span></p><p class="stat-label">less custom dev &amp; maintenance</p><p class="stat-ctx">Higher-ed SaaS migrations, through extensibility patterns and integration blueprints.</p></li>
+        <li class="stat" data-reveal><p class="stat-num"><span class="counter">99%</span></p><p class="stat-label">availability</p><p class="stat-ctx">After migrating monoliths to microservices; query times down 25%.</p></li>
+        <li class="stat" data-reveal><p class="stat-num"><span class="counter">50%</span></p><p class="stat-label">faster integration delivery</p><p class="stat-ctx">CI/CD, automated testing and repeatable architectures.</p></li>
+        <li class="stat" data-reveal><p class="stat-num"><span class="counter">40%</span></p><p class="stat-label">faster deploys</p><p class="stat-ctx">GitHub Actions, Docker and AWS pipelines.</p></li>
+        <li class="stat" data-reveal><p class="stat-num"><span class="counter">5,000+</span></p><p class="stat-label">daily active users</p><p class="stat-ctx">Responsive UIs and scalable REST APIs on a social platform.</p></li>
+        <li class="stat" data-reveal><p class="stat-num"><span class="counter">&lt;1s</span></p><p class="stat-label">real-time latency</p><p class="stat-ctx">Kafka, Redis and Socket.io messaging.</p></li>
+        <li class="stat" data-reveal><p class="stat-num"><span class="counter">10+</span></p><p class="stat-label">apps deployed &amp; secured</p><p class="stat-ctx">On AWS, DigitalOcean and VPS, with SSL and encryption.</p></li>
+      </ul>
+      <ul class="wins" data-reveal>
+        <li>3 production dashboards in 2 weeks; 80% of pending features shipped within one month.</li>
+        <li>A Google Drive–based file management platform used by 1,000+ users.</li>
+        <li>A scraping pipeline aggregating 10,000+ titles; Redis caching cut response times by 50%.</li>
+        <li>Backends scaled to thousands of concurrent users; scalability and uptime improved by 30–90%.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 · CAREER EVENT LOG -->
+  <section class="section career" id="career" aria-labelledby="career-title" data-tone="brand">
+    <div class="career-pin">
+      <div class="wrap section-head" data-reveal>
+        <p class="section-label">03 / career</p>
+        <h2 id="career-title">Career, as an event log.</h2>
+        <p class="topic mono"><span>topic: <b>career</b></span><span>partitions: 1</span><span>7 events</span><span>retention: forever</span></p>
+        <p class="log-progress mono" aria-hidden="true"><span class="log-bar"><span></span></span><span class="log-count">offset #0007</span></p>
+      </div>
+      <div class="log-viewport" role="region" aria-label="Career event log">
+        <ol class="log">
+          <li class="event">
+            <article>
+              <p class="event-head mono"><span class="offset">#0007</span><span>Sep 2025 – 2026</span></p>
+              <h3>Ellucian <span class="tag">Contract</span></h3>
+              <p class="event-metric">−80% custom dev &amp; maintenance</p>
+              <p class="event-role">Senior SaaS Extensibility Consultant</p>
+              <p class="event-place"><span aria-hidden="true">🇺🇸</span> Virginia, United States · Remote</p>
+              <ul class="event-points">
+                <li>Advised major universities across the US and Canada on SaaS migration and extensibility, cutting custom development and maintenance by 80%.</li>
+                <li>Consulted for Eastern and Central Connecticut State Universities, Pacific Northwest University of Health Sciences, Lycoming College and Evangel University on extensibility patterns and integration blueprints.</li>
+                <li>Designed data integration pipelines and connectors with PostgreSQL, OracleDB, JavaScript, React and GraphQL.</li>
+              </ul>
+              <ul class="chips" aria-label="Tech"><li>PostgreSQL</li><li>OracleDB</li><li>JavaScript</li><li>React</li><li>GraphQL</li></ul>
+            </article>
+          </li>
+          <li class="event">
+            <article>
+              <p class="event-head mono"><span class="offset">#0006</span><span>Nov 2024 – Jul 2025</span></p>
+              <h3>Unânime Planet <span class="tag">Contract</span></h3>
+              <p class="event-metric">99% availability</p>
+              <p class="event-role">Full Stack Software Engineer</p>
+              <p class="event-place"><span aria-hidden="true">🇵🇹</span> Aveiro, Portugal · Remote</p>
+              <ul class="event-points">
+                <li>Delivered 3 production-ready dashboards in 2 weeks.</li>
+                <li>Migrated monoliths to microservices: 99% availability, team productivity up 50%.</li>
+                <li>Built real-time notification services and inter-service communication with Kafka and Redis, with strong automated testing.</li>
+              </ul>
+              <ul class="chips" aria-label="Tech"><li>Microservices</li><li>Kafka</li><li>Redis</li><li>Automated Testing</li></ul>
+            </article>
+          </li>
+          <li class="event">
+            <article>
+              <p class="event-head mono"><span class="offset">#0005</span><span>Sep 2024 – Nov 2024</span></p>
+              <h3>Jointly Proptech <span class="tag">Contract</span></h3>
+              <p class="event-metric">80% of pending features shipped in month one</p>
+              <p class="event-role">Senior Backend Engineer</p>
+              <p class="event-place"><span aria-hidden="true">🇳🇬</span> Lagos, Nigeria · Remote</p>
+              <ul class="event-points">
+                <li>Built scalable server-side systems with Node.js, Express.js and MongoDB for a property-tech product.</li>
+                <li>Shipped 80% of pending features within the first month.</li>
+                <li>Improved scalability and uptime by 30% through architecture and load-balancing work.</li>
+              </ul>
+              <ul class="chips" aria-label="Tech"><li>Node.js</li><li>Express.js</li><li>MongoDB</li><li>Load balancing</li></ul>
+            </article>
+          </li>
+          <li class="event">
+            <article>
+              <p class="event-head mono"><span class="offset">#0004</span><span>Oct 2023 – Sep 2024</span></p>
+              <h3>KaiFinance <span class="tag">Full-time</span></h3>
+              <p class="event-metric">−65% critical incidents</p>
+              <p class="event-role">Lead Backend Engineer <span class="muted">· formerly Koboaccountant Africa</span></p>
+              <p class="event-place"><span aria-hidden="true">🇷🇼</span> Kigali, Rwanda · Remote</p>
+              <ul class="event-points">
+                <li>Pioneered a microservices architecture for the accounting system: query times −25%, availability/modularity +90%, critical incidents −65%.</li>
+                <li>Built a Google Drive–based file management platform (1,000+ users) and an automated task-management system with real-time scheduling and notifications.</li>
+                <li>Real-time communication with Socket.io (&lt;1s) and CI/CD with GitHub Actions, Docker and AWS: deployment time −40%.</li>
+              </ul>
+              <ul class="chips" aria-label="Tech"><li>Microservices</li><li>Socket.io</li><li>GitHub Actions</li><li>Docker</li><li>AWS</li></ul>
+            </article>
+          </li>
+          <li class="event">
+            <article>
+              <p class="event-head mono"><span class="offset">#0003</span><span>Feb 2023 – Dec 2023</span></p>
+              <h3>BeastMood Entertainment <span class="tag">Contract</span></h3>
+              <p class="event-metric">10,000+ titles aggregated</p>
+              <p class="event-role">Fullstack Developer</p>
+              <p class="event-place"><span aria-hidden="true">🇫🇷</span> Paris, France · Remote</p>
+              <ul class="event-points">
+                <li>Built a Cheerio + Puppeteer scraping pipeline aggregating 10,000+ manga titles.</li>
+                <li>Redis caching cut response times by 50%.</li>
+                <li>Implemented JWT-based access control; authentication 50% faster.</li>
+              </ul>
+              <ul class="chips" aria-label="Tech"><li>Cheerio</li><li>Puppeteer</li><li>Redis</li><li>JWT</li></ul>
+            </article>
+          </li>
+          <li class="event">
+            <article>
+              <p class="event-head mono"><span class="offset">#0002</span><span>Jan 2022 – Mar 2023</span></p>
+              <h3>Ekoverse Technologies <span class="tag">Contract</span></h3>
+              <p class="event-metric">5,000+ daily active users</p>
+              <p class="event-role">Lead Full Stack Developer</p>
+              <p class="event-place"><span aria-hidden="true">🇳🇬</span> Lagos, Nigeria · Remote</p>
+              <ul class="event-points">
+                <li>Built high-performance server-side systems for thousands of concurrent users on a social platform.</li>
+                <li>Responsive UIs and scalable REST APIs for 5,000+ daily active users.</li>
+                <li>Scalability and uptime +30%.</li>
+              </ul>
+              <ul class="chips" aria-label="Tech"><li>REST APIs</li><li>Responsive UI</li><li>Scalability</li></ul>
+            </article>
+          </li>
+          <li class="event">
+            <article>
+              <p class="event-head mono"><span class="offset">#0001</span><span>Feb 2019 – Jan 2022</span></p>
+              <h3>Freelance</h3>
+              <p class="event-metric">10+ apps deployed &amp; secured</p>
+              <p class="event-role">Fullstack Developer</p>
+              <p class="event-place"><span aria-hidden="true">🌍</span> Remote</p>
+              <ul class="event-points">
+                <li>Built server-side systems for health, e-commerce and content platforms with Node.js.</li>
+                <li>Turned UI designs into pixel-perfect, responsive, production-ready apps.</li>
+                <li>Deployed and secured 10+ apps on AWS, DigitalOcean and VPS with SSL/encryption; downtime −15%.</li>
+              </ul>
+              <ul class="chips" aria-label="Tech"><li>Node.js</li><li>AWS</li><li>DigitalOcean</li><li>SSL</li></ul>
+            </article>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · REMOTE GLOBE -->
+  <section class="section remote" id="remote" aria-labelledby="remote-title" data-tone="cool">
+    <div class="wrap remote-grid">
+      <div class="remote-copy" data-reveal>
+        <p class="section-label">04 / remote</p>
+        <h2 id="remote-title">Home in Abuja. Shipping everywhere.</h2>
+        <p class="lead">Shipped remotely for teams across North America, Europe and Africa.</p>
+        <ul class="places">
+          <li data-lat="9.0765" data-lon="7.3986" data-home><b>Abuja, Nigeria</b><span>Home base</span></li>
+          <li data-lat="37.5407" data-lon="-77.4360"><b>Virginia, US</b><span>Ellucian · Senior SaaS Extensibility Consultant</span></li>
+          <li data-lat="41.6612" data-lon="-72.7795"><b>New Britain, CT</b><span>Central Connecticut State University · Ellucian engagement</span></li>
+          <li data-lat="41.7107" data-lon="-72.2081"><b>Willimantic, CT</b><span>Eastern Connecticut State University · Ellucian engagement</span></li>
+          <li data-lat="46.6021" data-lon="-120.5059"><b>Yakima, WA</b><span>Pacific Northwest University of Health Sciences · Ellucian engagement</span></li>
+          <li data-lat="41.2412" data-lon="-77.0011"><b>Williamsport, PA</b><span>Lycoming College · Ellucian engagement</span></li>
+          <li data-lat="37.2090" data-lon="-93.2923"><b>Springfield, MO</b><span>Evangel University · Ellucian engagement</span></li>
+          <li data-lat="40.6405" data-lon="-8.6538"><b>Aveiro, Portugal</b><span>Unânime Planet · Full Stack Software Engineer</span></li>
+          <li data-lat="48.8566" data-lon="2.3522"><b>Paris, France</b><span>BeastMood Entertainment · Fullstack Developer</span></li>
+          <li data-lat="-1.9441" data-lon="30.0619"><b>Kigali, Rwanda</b><span>KaiFinance · Lead Backend Engineer</span></li>
+          <li data-lat="6.5244" data-lon="3.3792"><b>Lagos, Nigeria</b><span>Jointly Proptech · Senior Backend Engineer; Ekoverse Technologies · Lead Full Stack Developer</span></li>
+        </ul>
+      </div>
+      <div class="globe" data-scene="globe" data-cursor="drag">
+        <canvas aria-hidden="true"></canvas>
+        <div class="globe-pins"></div>
+        <div class="globe-card" aria-live="polite"></div>
+        <p class="globe-hint mono" aria-hidden="true">drag to spin</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · WORK -->
+  <section class="section work" id="work" aria-labelledby="work-title" data-tone="warm">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="section-label">05 / work</p>
+        <h2 id="work-title">Selected work.</h2>
+        <div class="filters" role="group" aria-label="Filter work">
+          <button type="button" class="chip-btn" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="chip-btn" data-filter="products" aria-pressed="false">Products</button>
+          <button type="button" class="chip-btn" data-filter="client" aria-pressed="false">Client work</button>
+          <button type="button" class="chip-btn" data-filter="lab" aria-pressed="false">Lab</button>
+        </div>
+      </div>
+      <p class="sr-only" aria-live="polite" id="work-count"></p>
+
+      <div class="cards">
+        <!-- Products (ZCODES) -->
+        <article class="card card-warm card-wide" data-category="products" data-slug="error-autopilot" data-skills="atlassian-forge javascript react">
+          <div class="card-media"><img src="img/ea-highlight-1.png" alt="Error Autopilot showing a Sentry error as a Jira issue with its stack trace" width="1840" height="900" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker"><img src="img/error-autopilot.png" alt="" width="24" height="24"> Product · ZCODES</p>
+            <h3>Error Autopilot for Jira</h3>
+            <p>Sentry alerts become Jira issues automatically, without Sentry's Business plan. Stack traces, sync, escalation of recurring errors and JQL on Sentry data.</p>
+            <p class="status status-review">Submitted to the Atlassian Marketplace (in review)</p>
+            <p class="card-actions"><a class="card-open" href="#work/error-autopilot" data-cursor="view">Read the case study<span class="sr-only">: Error Autopilot for Jira</span></a><a class="card-ext" href="error-autopilot/index.html">Documentation<span class="sr-only"> for Error Autopilot</span> →</a></p>
+          </div>
+          <div class="case" id="work/error-autopilot">
+            <h4>Problem</h4>
+            <p>Turning Sentry alerts into Jira issues automatically normally takes Sentry's Business plan. Without it, someone has to file every error by hand.</p>
+            <h4>What I built</h4>
+            <p>A Jira Cloud app on Atlassian Forge. Sentry alerts become Jira issues with stack traces, issues stay in sync, recurring errors escalate, and Sentry data becomes searchable with JQL. Every incoming webhook is verified before anything happens, the app runs on Atlassian's infrastructure, and a built-in test button shows it working before you rely on it.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Atlassian Forge</li><li>JavaScript</li><li>React</li><li>Forge KVS</li><li>Web triggers</li></ul>
+            <h4>Outcome</h4>
+            <p>A focused, production-ready Forge app with full documentation, support, security and privacy pages.</p>
+            <h4>Status</h4>
+            <p class="status status-review">Submitted to the Atlassian Marketplace (in review)</p>
+            <p><img src="img/ea-highlight-1.png" alt="Error Autopilot issue view: Sentry level, environment, release and stack trace on a Jira issue" width="1840" height="900" loading="lazy" decoding="async"></p>
+            <p><a href="error-autopilot/index.html">Read the Error Autopilot documentation →</a></p>
+          </div>
+        </article>
+
+        <article class="card card-cool card-wide" data-category="products" data-slug="build-beacon" data-skills="atlassian-forge javascript">
+          <div class="card-media"><img src="img/bb-highlight-1.png" alt="Build Beacon showing CircleCI builds and deployments on a Jira issue" width="1840" height="900" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker"><img src="img/build-beacon.png" alt="" width="24" height="24"> Product · ZCODES</p>
+            <h3>Build Beacon for Jira</h3>
+            <p>CircleCI builds and deployments on every Jira issue. No orb, no pipeline changes, never fails a build. JQL for build health.</p>
+            <p class="status status-review">Submitted to the Atlassian Marketplace (in review)</p>
+            <p class="card-actions"><a class="card-open" href="#work/build-beacon" data-cursor="view">Read the case study<span class="sr-only">: Build Beacon for Jira</span></a><a class="card-ext" href="build-beacon/index.html">Documentation<span class="sr-only"> for Build Beacon</span> →</a></p>
+          </div>
+          <div class="case" id="work/build-beacon">
+            <h4>Problem</h4>
+            <p>Getting CircleCI build and deployment status onto Jira issues usually means adding an orb or changing every pipeline.</p>
+            <h4>What I built</h4>
+            <p>A Jira Cloud app on Atlassian Forge that takes one CircleCI webhook per project and puts builds and deployments on every matching Jira issue through Jira's builds &amp; deployments APIs, keyed from the branch and commit. It can never fail or slow a build, and build health becomes searchable with JQL.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Atlassian Forge</li><li>JavaScript</li><li>Jira builds &amp; deployments APIs</li></ul>
+            <h4>Outcome</h4>
+            <p>Zero pipeline changes needed: builds, workflows and deployments appear in Jira's development panel.</p>
+            <h4>Status</h4>
+            <p class="status status-review">Submitted to the Atlassian Marketplace (in review)</p>
+            <p><img src="img/bb-highlight-1.png" alt="Build Beacon issue view: CircleCI builds and deployments listed on a Jira issue" width="1840" height="900" loading="lazy" decoding="async"></p>
+            <p><a href="build-beacon/index.html">Read the Build Beacon documentation →</a></p>
+          </div>
+        </article>
+
+        <!-- Client work -->
+        <article class="card" data-category="client" data-slug="kaifinance-microservices" data-skills="microservices socket-io ci-cd github-actions docker aws system-design">
+          <div class="card-media"><img src="assets/svg/case-mesh.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Client work · KaiFinance</p>
+            <h3>Accounting platform → microservices</h3>
+            <ul class="metrics"><li>−25% query time</li><li>−65% critical incidents</li><li>−40% deploy time</li><li>Socket.io &lt;1s</li></ul>
+            <p class="card-actions"><a class="card-open" href="#work/kaifinance-microservices" data-cursor="view">Read the case study<span class="sr-only">: Accounting platform to microservices</span></a></p>
+          </div>
+          <div class="case" id="work/kaifinance-microservices">
+            <h4>Problem</h4>
+            <p>An accounting system that had to become faster, more modular and more reliable as the product grew.</p>
+            <h4>What I built</h4>
+            <p>As Lead Backend Engineer, I pioneered the microservices architecture for the accounting system, added real-time communication with Socket.io, and set up CI/CD with GitHub Actions, Docker and AWS.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Microservices</li><li>Socket.io</li><li>GitHub Actions</li><li>Docker</li><li>AWS</li></ul>
+            <h4>Outcome</h4>
+            <ul><li>Query times −25%</li><li>Availability/modularity +90%</li><li>Critical incidents −65%</li><li>Real-time messaging under 1s</li><li>Deployment time −40%</li></ul>
+            <h4>Status</h4>
+            <p class="status">Delivered · Full-time, Oct 2023 – Sep 2024</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="client" data-slug="drive-file-management" data-skills="">
+          <div class="card-media"><img src="assets/svg/case-files.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Client work · KaiFinance</p>
+            <h3>File management on Google Drive</h3>
+            <ul class="metrics"><li>1,000+ users</li><li>Real-time scheduling</li></ul>
+            <p class="card-actions"><a class="card-open" href="#work/drive-file-management" data-cursor="view">Read the case study<span class="sr-only">: File management on Google Drive</span></a></p>
+          </div>
+          <div class="case" id="work/drive-file-management">
+            <h4>Problem</h4>
+            <p>Give users a file management platform built on the Google Drive they already use, with the busywork around it automated.</p>
+            <h4>What I built</h4>
+            <p>A Google Drive–based file management platform, plus an automated task-management system with real-time scheduling and notifications.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Google Drive</li><li>Real-time scheduling</li><li>Notifications</li></ul>
+            <h4>Outcome</h4>
+            <p>Used by 1,000+ users.</p>
+            <h4>Status</h4>
+            <p class="status">Delivered · Full-time, Oct 2023 – Sep 2024</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="client" data-slug="social-platform" data-skills="rest">
+          <div class="card-media"><img src="assets/svg/case-pulse.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Client work · Ekoverse Technologies</p>
+            <h3>Social platform at scale</h3>
+            <ul class="metrics"><li>5,000+ DAU</li><li>Thousands concurrent</li><li>+30% uptime</li></ul>
+            <p class="card-actions"><a class="card-open" href="#work/social-platform" data-cursor="view">Read the case study<span class="sr-only">: Social platform at scale</span></a></p>
+          </div>
+          <div class="case" id="work/social-platform">
+            <h4>Problem</h4>
+            <p>A social platform that had to stay fast for thousands of concurrent users.</p>
+            <h4>What I built</h4>
+            <p>As Lead Full Stack Developer: high-performance server-side systems, scalable REST APIs and responsive UIs.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>REST APIs</li><li>Responsive UI</li><li>Server-side systems</li></ul>
+            <h4>Outcome</h4>
+            <ul><li>5,000+ daily active users</li><li>Thousands of concurrent users</li><li>Scalability and uptime +30%</li></ul>
+            <h4>Status</h4>
+            <p class="status">Delivered · Contract, Jan 2022 – Mar 2023</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="client" data-slug="manga-aggregator" data-skills="redis jwt-auth">
+          <div class="card-media"><img src="assets/svg/case-scrape.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Client work · BeastMood Entertainment</p>
+            <h3>Manga aggregator</h3>
+            <ul class="metrics"><li>10,000+ titles</li><li>−50% response time</li><li>Auth 50% faster</li></ul>
+            <p class="card-actions"><a class="card-open" href="#work/manga-aggregator" data-cursor="view">Read the case study<span class="sr-only">: Manga aggregator</span></a></p>
+          </div>
+          <div class="case" id="work/manga-aggregator">
+            <h4>Problem</h4>
+            <p>Aggregate a large manga catalogue and serve it quickly, behind secure access control.</p>
+            <h4>What I built</h4>
+            <p>A Cheerio + Puppeteer scraping pipeline, a Redis caching layer and JWT-based access control.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Cheerio</li><li>Puppeteer</li><li>Redis</li><li>JWT</li></ul>
+            <h4>Outcome</h4>
+            <ul><li>10,000+ manga titles aggregated</li><li>Response times −50% with Redis caching</li><li>Authentication 50% faster</li></ul>
+            <h4>Status</h4>
+            <p class="status">Delivered · Contract, Feb 2023 – Dec 2023</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="client" data-slug="dashboards-microservices" data-skills="microservices kafka redis automated-testing">
+          <div class="card-media"><img src="assets/svg/case-dash.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Client work · Unânime Planet</p>
+            <h3>3 dashboards in 2 weeks + microservices migration</h3>
+            <ul class="metrics"><li>99% availability</li><li>+50% team productivity</li></ul>
+            <p class="card-actions"><a class="card-open" href="#work/dashboards-microservices" data-cursor="view">Read the case study<span class="sr-only">: 3 dashboards in 2 weeks and a microservices migration</span></a></p>
+          </div>
+          <div class="case" id="work/dashboards-microservices">
+            <h4>Problem</h4>
+            <p>Ship production dashboards fast while moving monoliths to microservices without losing availability.</p>
+            <h4>What I built</h4>
+            <p>3 production-ready dashboards in 2 weeks; the monolith-to-microservices migration; real-time notification services and inter-service communication with Kafka and Redis, backed by strong automated testing.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Microservices</li><li>Kafka</li><li>Redis</li><li>Automated Testing</li></ul>
+            <h4>Outcome</h4>
+            <ul><li>99% availability</li><li>Team productivity up 50%</li><li>3 dashboards in 2 weeks</li></ul>
+            <h4>Status</h4>
+            <p class="status">Delivered · Contract, Nov 2024 – Jul 2025</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="client" data-slug="university-extensibility" data-skills="postgresql oracledb javascript react graphql system-design">
+          <div class="card-media"><img src="assets/svg/case-bridge.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Client work · Ellucian</p>
+            <h3>University SaaS extensibility</h3>
+            <ul class="metrics"><li>−80% custom dev &amp; maintenance</li><li>Integration blueprints</li></ul>
+            <p class="card-actions"><a class="card-open" href="#work/university-extensibility" data-cursor="view">Read the case study<span class="sr-only">: University SaaS extensibility</span></a></p>
+          </div>
+          <div class="case" id="work/university-extensibility">
+            <h4>Problem</h4>
+            <p>Universities migrating to SaaS needed their integrations and extensions to carry over without a mountain of custom code to maintain.</p>
+            <h4>What I built</h4>
+            <p>Extensibility patterns and repeatable integration blueprints, consulting for Eastern and Central Connecticut State Universities, Pacific Northwest University of Health Sciences, Lycoming College and Evangel University. I designed data integration pipelines and connectors with PostgreSQL, OracleDB, JavaScript, React and GraphQL.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>PostgreSQL</li><li>OracleDB</li><li>JavaScript</li><li>React</li><li>GraphQL</li></ul>
+            <h4>Outcome</h4>
+            <p>Custom development and maintenance cut by 80% for universities across the US and Canada.</p>
+            <h4>Status</h4>
+            <p class="status">Contract · Senior SaaS Extensibility Consultant, Sep 2025 – 2026</p>
+          </div>
+        </article>
+
+        <!-- Lab -->
+        <article class="card" data-category="lab" data-slug="liquidity-engine" data-skills="automated-testing">
+          <div class="card-media"><img src="assets/svg/lab-book.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Lab · Python</p>
+            <h3>Prediction-market liquidity engine</h3>
+            <ul class="metrics"><li>27 unit tests</li><li>Kill switch</li></ul>
+            <p class="status status-lab">Private research</p>
+            <p class="card-actions"><a class="card-open" href="#work/liquidity-engine" data-cursor="view">Read the case study<span class="sr-only">: Prediction-market liquidity engine</span></a></p>
+          </div>
+          <div class="case" id="work/liquidity-engine">
+            <h4>Problem</h4>
+            <p>Provide liquidity on prediction markets to earn liquidity rewards, with guardrails that keep a bot from doing something silly.</p>
+            <h4>What I built</h4>
+            <p>A market-making engine with a quadratic reward-score model, a live order manager that diffs desired vs open orders, automatic market rotation, stranded-inventory exits, a jump guard and a kill switch, with phone alerts.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Python</li><li>Automated Testing</li></ul>
+            <h4>Outcome</h4>
+            <p>27 unit tests cover the engine.</p>
+            <h4>Status</h4>
+            <p class="status status-lab">Private research</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="lab" data-slug="tron-energy" data-skills="automated-testing">
+          <div class="card-media"><img src="assets/svg/lab-energy.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Lab · Python, standard library only</p>
+            <h3>Non-custodial TRON energy service</h3>
+            <ul class="metrics"><li>23 unit tests</li><li>Never holds funds</li></ul>
+            <p class="status status-lab">In development</p>
+            <p class="card-actions"><a class="card-open" href="#work/tron-energy" data-cursor="view">Read the case study<span class="sr-only">: Non-custodial TRON energy service</span></a></p>
+          </div>
+          <div class="case" id="work/tron-energy">
+            <h4>Problem</h4>
+            <p>USDT transfers on TRON burn a fee when the sender has no network energy.</p>
+            <h4>What I built</h4>
+            <p>A Telegram bot that rents network energy so USDT transfers cost a fraction of the burn fee. It never holds user funds and has replay-safe on-chain payment verification, spend caps and a strict order state machine.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Python (standard library)</li><li>Telegram bot</li><li>TRON</li></ul>
+            <h4>Outcome</h4>
+            <p>23 unit tests cover the service.</p>
+            <h4>Status</h4>
+            <p class="status status-lab">In development</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="lab" data-slug="gift-radar" data-skills="automated-testing">
+          <div class="card-media"><img src="assets/svg/lab-radar.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Lab · @giftsRadarsBot</p>
+            <h3>Telegram Gift Radar</h3>
+            <ul class="metrics"><li>13 unit tests</li><li>Below-floor alerts</li></ul>
+            <p class="status status-lab">Launching soon</p>
+            <p class="card-actions"><a class="card-open" href="#work/gift-radar" data-cursor="view">Read the case study<span class="sr-only">: Telegram Gift Radar</span></a></p>
+          </div>
+          <div class="case" id="work/gift-radar">
+            <h4>Problem</h4>
+            <p>Track Telegram collectible gifts and catch listings below the floor price.</p>
+            <h4>What I built</h4>
+            <p>A Telegram bot with below-floor alerts for collectible gifts, floor prices, portfolio valuation and Telegram Stars subscriptions.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Telegram bot</li><li>Telegram Stars</li></ul>
+            <h4>Outcome</h4>
+            <p>13 unit tests cover the bot.</p>
+            <h4>Status</h4>
+            <p class="status status-lab">Launching soon</p>
+          </div>
+        </article>
+
+        <article class="card" data-category="lab" data-slug="anti-phishing" data-skills="">
+          <div class="card-media"><img src="assets/svg/lab-shield.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+          <div class="card-body">
+            <p class="card-kicker">Lab · University of Ilorin</p>
+            <h3>Anti-phishing Chrome extension</h3>
+            <ul class="metrics"><li>Final-year project</li></ul>
+            <p class="status status-lab">Final project · 2023</p>
+            <p class="card-actions"><a class="card-open" href="#work/anti-phishing" data-cursor="view">Read the case study<span class="sr-only">: Anti-phishing Chrome extension</span></a></p>
+          </div>
+          <div class="case" id="work/anti-phishing">
+            <h4>Problem</h4>
+            <p>Protect students using the University of Ilorin's undergraduate portal from phishing attacks.</p>
+            <h4>What I built</h4>
+            <p>A Chrome extension that prevents phishing attacks on the university's undergraduate portal.</p>
+            <h4>Stack</h4>
+            <ul class="chips"><li>Chrome extension</li></ul>
+            <h4>Outcome</h4>
+            <p>Protects students on the undergraduate portal.</p>
+            <h4>Status</h4>
+            <p class="status status-lab">Final project, Bachelor's Degree (2023)</p>
+          </div>
+        </article>
+      </div>
+      <p class="work-cta" data-reveal><span>Need a system like these, built to stay up?</span> <a class="btn" href="#contact" data-focus="#f-name" data-magnetic>Hire me <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+  <!-- 06 · SKILLS -->
+  <section class="section skills" id="skills" aria-labelledby="skills-title" data-tone="brand">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="section-label">06 / skills</p>
+        <h2 id="skills-title">A constellation of tools.</h2>
+        <p class="lead">Hover a skill to see where it shipped.</p>
+      </div>
+      <div class="skills-grid">
+        <div class="sphere" data-scene="skills" data-cursor="drag" aria-hidden="true">
+          <canvas></canvas>
+          <div class="sphere-tags"></div>
+        </div>
+        <div class="skill-groups">
+          <div class="skill-group" data-group="languages"><h3>Languages</h3><ul><li data-skill="typescript">TypeScript</li><li data-skill="javascript">JavaScript</li></ul></div>
+          <div class="skill-group" data-group="frontend"><h3>Frontend</h3><ul><li data-skill="react">React</li><li data-skill="nextjs">Next.js</li><li data-skill="redux">Redux Toolkit &amp; Context API</li></ul></div>
+          <div class="skill-group" data-group="backend"><h3>Backend</h3><ul><li data-skill="nodejs">Node.js</li><li data-skill="expressjs">Express.js</li><li data-skill="graphql">GraphQL</li><li data-skill="grpc">gRPC</li><li data-skill="rest">REST</li><li data-skill="socket-io">Socket.io</li><li data-skill="microservices">Microservices</li><li data-skill="jwt-auth">JWT auth</li></ul></div>
+          <div class="skill-group" data-group="data"><h3>Data</h3><ul><li data-skill="postgresql">PostgreSQL</li><li data-skill="mongodb">MongoDB</li><li data-skill="oracledb">OracleDB</li><li data-skill="redis">Redis</li><li data-skill="kafka">Kafka</li></ul></div>
+          <div class="skill-group" data-group="infra"><h3>Infra</h3><ul><li data-skill="aws">AWS</li><li data-skill="digitalocean">DigitalOcean</li><li data-skill="docker">Docker</li><li data-skill="ci-cd">CI/CD</li><li data-skill="github-actions">GitHub Actions</li><li data-skill="atlassian-forge">Atlassian Forge</li></ul></div>
+          <div class="skill-group" data-group="practices"><h3>Practices</h3><ul><li data-skill="system-design">System Design &amp; Architecture</li><li data-skill="automated-testing">Automated Testing</li><li data-skill="ai-driven">AI-Driven Development</li><li data-skill="mentoring">Mentoring</li></ul></div>
+          <p class="skill-readout mono" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 · CONTACT -->
+  <section class="section contact" id="contact" aria-labelledby="contact-title" data-tone="brand">
+    <div class="wrap contact-grid">
+      <div class="contact-copy" data-reveal>
+        <p class="section-label">07 / contact</p>
+        <h2 id="contact-title">Send a request.</h2>
+        <p class="lead">Remote contracts, senior full-stack roles, or a system that needs to stop going down. The endpoint is open.</p>
+        <p class="email-row">
+          <a class="email" href="mailto:successzion21@gmail.com">successzion21@gmail.com</a>
+          <button type="button" class="btn btn-ghost btn-small copy-email" data-email="successzion21@gmail.com">Copy email</button>
+        </p>
+        <ul class="socials">
+          <li><a href="https://github.com/Zeeohn" rel="me noopener" target="_blank">GitHub<span class="sr-only"> (opens in a new tab)</span> ↗</a></li>
+          <li><a href="https://linkedin.com/in/zcodes" rel="me noopener" target="_blank">LinkedIn<span class="sr-only"> (opens in a new tab)</span> ↗</a></li>
+          <li><a href="mailto:successzion21@gmail.com">Email ↗</a></li>
+        </ul>
+        <p class="cli-teaser">Prefer a CLI? Press <kbd>`</kbd> (or use the nav terminal button) and type <code>hire</code>.</p>
+      </div>
+
+      <form class="api" id="hire-form" action="mailto:successzion21@gmail.com" method="post" enctype="text/plain" data-reveal>
+        <div class="api-bar">
+          <span class="api-method">POST</span>
+          <span class="api-url mono">/v1/hire-zion</span>
+          <button type="submit" class="btn btn-small" data-magnetic>Send</button>
+        </div>
+        <p class="api-tabs mono"><span class="on">Body</span><span>JSON</span><span class="dim">Content-Type: application/json</span></p>
+        <div class="json mono">
+          <span class="j-p">{</span>
+          <div class="j-row">
+            <label for="f-name"><span class="j-k">"name"</span><span class="j-p">:</span></label>
+            <span class="j-field"><input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="&quot;Ada Lovelace&quot;"><span class="j-p">,</span></span>
+          </div>
+          <div class="j-row">
+            <label for="f-email"><span class="j-k">"email"</span><span class="j-p">:</span></label>
+            <span class="j-field"><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="&quot;ada@example.com&quot;"><span class="j-p">,</span></span>
+          </div>
+          <div class="j-row j-row-msg">
+            <label for="f-message"><span class="j-k">"message"</span><span class="j-p">:</span></label>
+            <span class="j-field"><textarea id="f-message" name="message" rows="5" required maxlength="4000" placeholder="&quot;We need a real-time backend that scales…&quot;"></textarea></span>
+          </div>
+          <span class="j-p">}</span>
+        </div>
+        <p class="api-error" role="alert"></p>
+        <div class="api-response" hidden>
+          <p class="mono"><span class="code-201">201 Created</span> <span class="dim">· 0.8s</span></p>
+          <pre class="mono">{
+  "status": "drafted",
+  "next": "Your mail app opened with this request. Hit send there.",
+  "reply_within": "a day or two"
+}</pre>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div class="footer-brand"><span class="mark" aria-hidden="true"></span><p>© 2026 ZCODES · Zion Success</p></div>
+    <nav aria-label="Products">
+      <h2 class="footer-h">Products</h2>
+      <ul><li><a href="error-autopilot/index.html">Error Autopilot</a></li><li><a href="build-beacon/index.html">Build Beacon</a></li></ul>
+    </nav>
+    <nav aria-label="Legal and support">
+      <h2 class="footer-h">Company</h2>
+      <ul><li><a href="support.html">Support</a></li><li><a href="security.html">Security</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul>
+    </nav>
+    <div class="prefs">
+      <h2 class="footer-h">Preferences</h2>
+      <ul>
+        <li><button type="button" class="link-btn motion-toggle" aria-pressed="false">Pause animations</button></li>
+        <li><button type="button" class="link-btn shortcut-toggle" aria-pressed="true">Backtick (`) terminal shortcut</button></li>
+      </ul>
+    </div>
+    <p class="footer-note">Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI. No cookies, no trackers.</p>
+  </div>
+</footer>
+
+<!-- Case-study overlay (filled from the matching card's .case block) -->
+<dialog class="case-dialog" id="case-dialog" aria-labelledby="case-title" data-lenis-prevent>
+  <div class="case-dialog-in">
+    <button class="icon-btn case-close" type="button" aria-label="Close case study">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="case-hero"></div>
+    <p class="case-kicker mono"></p>
+    <h2 id="case-title"></h2>
+    <div class="case-content"></div>
+    <p class="case-cta"><a class="btn" href="#contact" data-focus="#f-name">Hire me for work like this <span aria-hidden="true">→</span></a> <a class="link-btn" href="mailto:successzion21@gmail.com">or email me</a></p>
+  </div>
+</dialog>
+
+<!-- Terminal overlay -->
+<dialog class="terminal" id="terminal" aria-labelledby="terminal-title" data-lenis-prevent>
+  <div class="term-bar">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <h2 id="terminal-title" class="mono">zion@zcodes: ~</h2>
+    <button class="icon-btn term-close" type="button" aria-label="Close terminal">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="term-out mono" role="log" aria-live="polite"></div>
+  <form class="term-form mono" autocomplete="off">
+    <label for="term-in" class="term-prompt"><span aria-hidden="true">zion@zcodes:~$</span><span class="sr-only">Command</span></label>
+    <input id="term-in" name="command" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="term-help">
+  </form>
+  <p id="term-help" class="sr-only">Type help for a list of commands. Up and down arrows recall history, Tab autocompletes, Escape closes.</p>
+</dialog>
+
+<div class="toast" role="status" aria-live="polite"></div>
+<div class="cursor is-hidden" aria-hidden="true"><span class="cursor-dot"></span><span class="cursor-ring"><span class="cursor-label"></span></span></div>
+</body>
+</html>
