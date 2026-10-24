@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
 import { MeshSurfaceSampler } from 'three/addons/math/MeshSurfaceSampler.js';
-import { reducedMotion, lowPower, pixelRatio, clamp, lerp, renderLoop, onResize, webgl2, nextTask } from './util.js';
+import { reducedMotion, lowPower, motion, pixelRatio, clamp, lerp, renderLoop, onResize, webgl2, nextTask } from './util.js';
 
 export async function initHero(root) {
   const canvas = root.querySelector('canvas');
@@ -33,7 +33,8 @@ export async function initHero(root) {
     new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       metalness: 1,
-      roughness: 0.24,
+      roughness: 0.16,
+      envMapIntensity: 1.25,
       clearcoat: 1,
       clearcoatRoughness: 0.05,
       iridescence: 0.85,
@@ -72,6 +73,16 @@ export async function initHero(root) {
     return range > 0 ? clamp(-r.top / range) : 0;
   };
 
+  // Entrance: the mark spins and scales in as the boot preloader wipes away.
+  const bootEnd = document.documentElement.classList.contains('boot') ? 1150 : 0;
+  const introStart = Math.max(performance.now(), bootEnd);
+  const introProgress = () => {
+    if (reducedMotion || motion.paused) return 1;
+    const x = clamp((performance.now() - introStart) / 1700);
+    return x === 1 ? 1 : 1 - Math.pow(2, -10 * x); // easeOutExpo
+  };
+  let fitScale = 1;
+
   let lastP = -1;
   const frame = (t) => {
     const p = scrollProgress();
@@ -89,10 +100,15 @@ export async function initHero(root) {
       group.rotation.y = tilt.y - 0.22 + Math.sin(t * 0.4) * 0.14;
       group.position.y = Math.sin(t * 0.9) * 0.08;
     }
+    const intro = introProgress();
+    group.rotation.y += (1 - intro) * -2.4;
+    group.scale.setScalar(fitScale * (0.55 + 0.45 * intro));
+    // Sweep the reflections: a slow orbit plus the cursor, so light glides across the face.
+    scene.environmentRotation.set(tilt.x * 0.6, t * 0.32 + tilt.y * 1.4, 0);
 
     // Shatter: the solid fades out as the particle cloud takes over.
     const solid = 1 - THREE.MathUtils.smoothstep(p, 0.02, 0.16);
-    mesh.material.opacity = solid;
+    mesh.material.opacity = solid * Math.min(1, intro * 3);
     mesh.visible = solid > 0.01;
     mesh.scale.setScalar(1 + (1 - solid) * 0.06);
     if (particles) {
@@ -112,7 +128,7 @@ export async function initHero(root) {
     camera.updateProjectionMatrix();
     // Fit the mark to ~62% of the smaller visible dimension.
     const vh = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
-    group.scale.setScalar(Math.min(vh, vh * camera.aspect) * 0.62);
+    fitScale = Math.min(vh, vh * camera.aspect) * 0.62;
     if (particles) particles.material.uniforms.uScale.value = h * pixelRatio();
     loop.invalidate();
   });
@@ -235,13 +251,13 @@ function shatterParticles(mesh, count) {
         float p = clamp((uProgress - aSeed * 0.18) / 0.82, 0.0, 1.0);
         float burst = 1.0 - pow(1.0 - p, 3.0);
         vec3 pos = position + aDir * burst * 0.9;
-        pos.y -= p * p * (2.6 + aSeed * 2.2);          // stream down toward the next section
+        pos.y -= p * p * (1.3 + aSeed * 2.4);          // stream down toward the next section
         pos.x += sin(uTime * 0.9 + aSeed * 40.0) * 0.04 * p;
         vec4 mv = modelViewMatrix * vec4(pos, 1.0);
         gl_Position = projectionMatrix * mv;
         gl_PointSize = uScale * (0.02 + aSeed * 0.03) / -mv.z;
         vSeed = aSeed;
-        vAlpha = smoothstep(0.0, 0.06, uProgress) * (1.0 - smoothstep(0.7, 1.0, p));
+        vAlpha = smoothstep(0.0, 0.06, uProgress) * (1.0 - smoothstep(0.88, 1.0, p) * 0.6);
       }`,
     fragmentShader: `
       varying float vSeed, vAlpha;
