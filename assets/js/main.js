@@ -1,7 +1,7 @@
 // Entry point. Everything here is progressive enhancement: the page is fully
 // readable before (and without) this script. Heavy WebGL scenes are imported
 // lazily, only when their section approaches the viewport.
-import { reducedMotion, finePointer, hasWebGL, whenIdle, motion, setMotionPaused } from './util.js';
+import { reducedMotion, finePointer, hasWebGL, whenIdle, motion, setMotionPaused, webgl2 } from './util.js';
 import { initCursor } from './cursor.js';
 import { initCounters } from './counters.js';
 import { initWork } from './work.js';
@@ -71,18 +71,21 @@ function splitHeadline(h1) {
     (gradient || visual).append(w);
   });
 
-  h1.childNodes.forEach((node) => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      words(node.textContent, null);
-    } else {
+  // Walk the heading: text becomes words, <br> is kept, <em> becomes gradient words.
+  const walk = (nodes, parent, gradient) => nodes.forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) words(node.textContent, gradient);
+    else if (node.nodeName === 'BR') parent.append(document.createElement('br'));
+    else {
       const em = document.createElement('em');
-      visual.append(em);
-      words(node.textContent, em);
+      parent.append(em);
+      walk(node.childNodes, em, em);
     }
   });
-  // Single spaces between words (inside <em> too).
-  visual.querySelectorAll('.w').forEach((w, idx, all) => {
-    if (idx < all.length - 1) w.after(' ');
+  walk(h1.childNodes, visual, null);
+  // Single spaces between words on the same line (inside <em> too).
+  const all = [...visual.querySelectorAll('.w')];
+  all.forEach((w, k) => {
+    if (k < all.length - 1 && w.nextSibling?.nodeName !== 'BR') w.after(' ');
   });
 
   h1.replaceChildren(Object.assign(document.createElement('span'), { className: 'sr-only', textContent: label }), visual);
@@ -290,6 +293,9 @@ function initScenes(work) {
       const el = entry.target;
       whenIdle(async () => {
         try {
+          // Probe WebGL on the scene's own canvas (three.js reuses this context) before
+          // downloading three.js, so blocked-WebGL browsers get the fallback at once.
+          if (el.dataset.scene !== 'skills') webgl2(el.querySelector('canvas'));
           const init = await loaders[el.dataset.scene]();
           await init(el);
         } catch (err) {

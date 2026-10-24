@@ -5,8 +5,8 @@
    ========================================================================= */
 
 /* Metric-matched fallbacks so the Google Fonts swap causes no layout shift */
-@font-face { font-family: "Inter Fallback"; src: local("Arial"), local("Helvetica Neue"), local("Helvetica"); ascent-override: 90.49%; descent-override: 22.56%; line-gap-override: 0%; size-adjust: 107.06%; }
-@font-face { font-family: "JetBrains Mono Fallback"; src: local("Courier New"), local("Courier"); ascent-override: 102%; descent-override: 30%; line-gap-override: 0%; size-adjust: 100%; }
+@font-face { font-family: "Inter Fallback"; src: local("Arial"), local("Arimo"), local("Liberation Sans"), local("Helvetica Neue"), local("Helvetica"), local("Roboto"); ascent-override: 90.49%; descent-override: 22.56%; line-gap-override: 0%; size-adjust: 107.06%; }
+@font-face { font-family: "JetBrains Mono Fallback"; src: local("Courier New"), local("Cousine"), local("Liberation Mono"), local("Courier"); ascent-override: 102%; descent-override: 30%; line-gap-override: 0%; size-adjust: 100%; }
 
 :root {
   --ink: #0B1220;
@@ -168,7 +168,7 @@ body[data-tone="brand"] .tone-brand, body[data-tone="cool"] .tone-cool, body[dat
 /* Fills the shatter phase so the scroll never feels empty */
 .hero-handoff { position: absolute; left: 50%; bottom: 18%; z-index: 2; margin: 0; translate: -50% 0; white-space: nowrap; font-size: clamp(.8rem, 1.4vw, 1rem); color: var(--text); opacity: clamp(0, calc((var(--hp, 0) - .4) * 3.5), 1); pointer-events: none; }
 .hero-handoff .ok { color: var(--green); }
-.proof { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 22px 0 0; font-size: .9rem; color: var(--muted); }
+.proof { display: flex; flex-wrap: wrap; gap: 8px 22px; max-width: 30rem; margin: 22px 0 0; font-size: .9rem; color: var(--muted); }
 .proof li { display: flex; align-items: baseline; gap: 6px; }
 .proof b { color: var(--text); font-size: 1.05rem; font-weight: 800; letter-spacing: -.01em; }
 @media (max-width: 600px) { .proof { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; font-size: .8rem; margin-top: 16px; } .proof b { font-size: .95rem; } }
@@ -180,7 +180,8 @@ body[data-tone="brand"] .tone-brand, body[data-tone="cool"] .tone-cool, body[dat
 .avatar-mono { display: grid; place-items: center; font: 800 1.1rem var(--font-sans); letter-spacing: .02em; }
 @property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @keyframes ring { to { --a: 360deg; } }
-.hero-title { font-size: clamp(2.7rem, 7.6vw, 6.6rem); line-height: .98; letter-spacing: -.04em; max-width: 11.5ch; margin-bottom: .32em; }
+/* Line breaks are explicit (<br>) so the line count, and so the layout, never depends on which font has loaded. */
+.hero-title { font-size: clamp(2.45rem, 7.6vw, 6.6rem); line-height: .98; letter-spacing: -.04em; margin-bottom: .32em; }
 .hero-title em { font-style: normal; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero-sub { max-width: 52ch; color: var(--muted); font: 500 clamp(.82rem, 1.2vw, .95rem)/1.7 var(--font-mono); }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 20px; }
