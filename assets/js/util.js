@@ -24,6 +24,16 @@ export const lerp = (a, b, t) => a + (b - a) * t;
 export const hasWebGL = () => 'WebGLRenderingContext' in window;
 
 /**
+ * Creates the WebGL2 context three.js renders into, on the scene's own canvas.
+ * Throws (quietly, for main.js to catch) when WebGL is blocked or unavailable.
+ */
+export function webgl2(canvas) {
+  const gl = canvas.getContext('webgl2', { alpha: true, antialias: !lowPower, powerPreference: 'high-performance' });
+  if (!gl) throw new Error('WebGL2 unavailable');
+  return gl;
+}
+
+/**
  * Drives `frame(time, dt)` with requestAnimationFrame only while `el` intersects
  * the viewport and the document is visible. Returns { invalidate } so static
  * (reduced-motion) scenes can request a single redraw.

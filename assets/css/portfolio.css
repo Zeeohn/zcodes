@@ -59,6 +59,8 @@ code, kbd, .mono { font-family: var(--font-mono); }
 kbd { display: inline-grid; place-items: center; min-width: 1.7em; padding: 0 .4em; border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 6px; font-size: .85em; background: var(--surface); }
 ::selection { background: rgba(124, 58, 237, .45); color: #fff; }
 :focus-visible { outline: 2px solid var(--indigo-text); outline-offset: 3px; border-radius: 6px; }
+/* Sections receive programmatic focus after in-page navigation; no ring needed there. */
+main [tabindex="-1"]:focus { outline: none; }
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .muted { color: var(--muted); font-weight: 400; }
 .dim { color: var(--muted); }
@@ -191,7 +193,7 @@ body[data-tone="brand"] .tone-brand, body[data-tone="cool"] .tone-cool, body[dat
 @keyframes reveal-fallback { to { opacity: 1; } }
 
 @media (max-width: 860px) {
-  .hero-canvas { width: 100%; top: var(--nav-h); bottom: auto; height: 38%; }
+  .hero-canvas { width: 100%; top: var(--nav-h); bottom: auto; height: 32%; }
   .hero-stage { align-items: end; }
   .hero-copy { padding-bottom: 64px; }
   .hero-fallback .mark { width: 42%; }

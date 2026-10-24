@@ -3,7 +3,7 @@
 // auto-rotating, pauses on interaction. Pins are real, focusable buttons.
 import * as THREE from 'three';
 import { feature } from 'topojson-client';
-import { reducedMotion, lowPower, pixelRatio, clamp, lerp, renderLoop, onResize } from './util.js';
+import { reducedMotion, lowPower, pixelRatio, clamp, lerp, renderLoop, onResize, webgl2 } from './util.js';
 
 const LAND_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-110m.json';
 const RAD = Math.PI / 180;
@@ -31,7 +31,7 @@ export async function initGlobe(root) {
   const topology = await (await fetch(LAND_URL)).json();
   const dots = landDots(feature(topology, topology.objects.land), lowPower ? 1.5 : 1.05);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lowPower, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, context: webgl2(canvas) });
   renderer.setPixelRatio(pixelRatio());
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);

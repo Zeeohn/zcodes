@@ -3,7 +3,7 @@
 // it was used, position, colour) comes from the HTML list in #system, so the
 // no-JS page and the 3D graph share one source of truth.
 import * as THREE from 'three';
-import { reducedMotion, lowPower, pixelRatio, clamp, lerp, renderLoop, onResize, trackPointer } from './util.js';
+import { reducedMotion, lowPower, pixelRatio, clamp, lerp, renderLoop, onResize, webgl2, trackPointer } from './util.js';
 
 const EDGES = [
   ['gateway', 'auth'], ['gateway', 'graphql'], ['gateway', 'socketio'], ['gateway', 'kafka'],
@@ -30,7 +30,7 @@ export function initNetwork(root) {
   const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
   const edges = EDGES.map(([a, b]) => [byId[a], byId[b]]);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lowPower, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, context: webgl2(canvas) });
   renderer.setPixelRatio(pixelRatio());
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);

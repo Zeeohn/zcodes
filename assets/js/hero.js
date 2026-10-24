@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
 import { MeshSurfaceSampler } from 'three/addons/math/MeshSurfaceSampler.js';
-import { reducedMotion, lowPower, pixelRatio, clamp, lerp, renderLoop, onResize, nextTask } from './util.js';
+import { reducedMotion, lowPower, pixelRatio, clamp, lerp, renderLoop, onResize, webgl2, nextTask } from './util.js';
 
 export async function initHero(root) {
   const canvas = root.querySelector('canvas');
@@ -12,7 +12,7 @@ export async function initHero(root) {
   const stage = root.closest('.hero-stage');
   const svg = await (await fetch('assets/zcodes-mark.svg')).text();
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !lowPower, alpha: true, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({ canvas, context: webgl2(canvas) });
   renderer.setPixelRatio(pixelRatio());
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
