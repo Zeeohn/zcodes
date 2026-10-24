@@ -4,7 +4,32 @@
 export const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 export const lowPower = innerWidth < 768 || (navigator.hardwareConcurrency || 8) <= 4;
-export const pixelRatio = () => Math.min(window.devicePixelRatio || 1, 1.75);
+// Mid-range phones are fill-rate bound: rendering at 1.25x instead of 1.75x halves the pixels shaded.
+export const pixelRatio = () => Math.min(window.devicePixelRatio || 1, lowPower ? 1.25 : 1.75);
+
+/**
+ * User-controlled "Pause animations" (WCAG 2.2.2). Persisted per browser; the
+ * <head> script applies the class before first paint. Scroll- and pointer-driven
+ * effects keep working; only autonomous motion stops.
+ */
+const storedMotion = (() => {
+  try {
+    return localStorage.getItem('zs-motion');
+  } catch {
+    return null;
+  }
+})();
+export const motion = { paused: storedMotion === 'paused' };
+export function setMotionPaused(paused) {
+  motion.paused = paused;
+  try {
+    localStorage.setItem('zs-motion', paused ? 'paused' : 'on');
+  } catch {
+    /* private mode: the toggle still works for this visit */
+  }
+  document.documentElement.classList.toggle('motion-paused', paused);
+  document.dispatchEvent(new Event('motion:change'));
+}
 
 /** Yields to the event loop so long setup work is split into short tasks. */
 export const nextTask = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -35,19 +60,27 @@ export function webgl2(canvas) {
 
 /**
  * Drives `frame(time, dt)` with requestAnimationFrame only while `el` intersects
- * the viewport and the document is visible. Returns { invalidate } so static
- * (reduced-motion) scenes can request a single redraw.
+ * the viewport and the document is visible. `time` is animation time: it stops
+ * advancing (and dt is 0) while motion is paused. `fps` caps ambient scenes.
+ * Returns { invalidate } so static (reduced-motion) scenes can request a redraw.
  */
-export function renderLoop(el, frame, { continuous = true } = {}) {
+export function renderLoop(el, frame, { continuous = true, fps = 60 } = {}) {
   let visible = false;
   let raf = 0;
   let last = performance.now();
+  let time = 0;
+  const minGap = 1000 / fps - 2;
 
   const tick = (now) => {
     raf = 0;
-    const dt = Math.min((now - last) / 1000, 0.05);
+    if (continuous && now - last < minGap) {
+      raf = requestAnimationFrame(tick);
+      return;
+    }
+    const dt = motion.paused ? 0 : Math.min((now - last) / 1000, 0.05);
     last = now;
-    frame(now / 1000, dt);
+    time += dt;
+    frame(time, dt);
     if (continuous && visible && !document.hidden) raf = requestAnimationFrame(tick);
   };
   const start = () => {

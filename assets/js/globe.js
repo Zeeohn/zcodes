@@ -55,6 +55,7 @@ export async function initGlobe(root) {
   let target = null;
   let dragging = false;
   let idleUntil = 0;
+  let clock = 0; // animation time from the render loop (frozen while motion is paused)
   let last = { x: 0, y: 0 };
   canvas.addEventListener('pointerdown', (e) => {
     dragging = true;
@@ -72,7 +73,7 @@ export async function initGlobe(root) {
   });
   const release = () => {
     dragging = false;
-    idleUntil = performance.now() / 1000 + 3.5;
+    idleUntil = clock + 3.5;
   };
   canvas.addEventListener('pointerup', release);
   canvas.addEventListener('pointercancel', release);
@@ -86,7 +87,7 @@ export async function initGlobe(root) {
     let ty = -pin.place.lon * RAD;
     ty += Math.round((rot.y - ty) / (2 * Math.PI)) * 2 * Math.PI;
     target = { x: clamp(pin.place.lat * RAD, -0.9, 0.9), y: ty };
-    idleUntil = performance.now() / 1000 + 6;
+    idleUntil = clock + 6;
     loop.invalidate();
   };
   const pins = places.map((place) => {
@@ -107,6 +108,7 @@ export async function initGlobe(root) {
   let size = 1;
   const v = new THREE.Vector3();
   const frame = (t, dt) => {
+    clock = t;
     if (target) {
       rot.x = lerp(rot.x, target.x, 0.08);
       rot.y = lerp(rot.y, target.y, 0.08);
@@ -131,7 +133,7 @@ export async function initGlobe(root) {
     if (reducedMotion && (target || dragging)) requestAnimationFrame(() => loop.invalidate());
   };
 
-  const loop = renderLoop(canvas, frame, { continuous: !reducedMotion });
+  const loop = renderLoop(canvas, frame, { continuous: !reducedMotion, fps: lowPower ? 30 : 60 });
   onResize(root, (w) => {
     size = w;
     renderer.setSize(w, w, false);
@@ -146,8 +148,8 @@ export async function initGlobe(root) {
  * points of an equal-area lat/lon grid that land on a filled pixel.
  */
 function landDots(land, step) {
-  const W = 1440;
-  const H = 720;
+  const W = lowPower ? 720 : 1440;
+  const H = W / 2;
   const c = document.createElement('canvas');
   c.width = W;
   c.height = H;

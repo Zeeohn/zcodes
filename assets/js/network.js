@@ -142,7 +142,7 @@ export function initNetwork(root) {
     }
   };
 
-  const loop = renderLoop(canvas, frame, { continuous: !reducedMotion });
+  const loop = renderLoop(canvas, frame, { continuous: !reducedMotion, fps: lowPower ? 30 : 60 });
   onResize(root, (w, h) => {
     width = w;
     height = h;

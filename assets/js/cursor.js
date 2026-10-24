@@ -1,7 +1,7 @@
 // Custom cursor: a dot that follows the pointer exactly and a ring that lags
 // behind, grows over interactive elements and shows a label ("view", "drag")
 // for elements with data-cursor. Fine pointers only, never with reduced motion.
-import { reducedMotion, finePointer, lerp } from './util.js';
+import { reducedMotion, finePointer, motion, lerp } from './util.js';
 
 export function initCursor() {
   if (!finePointer || reducedMotion) return;
@@ -9,7 +9,10 @@ export function initCursor() {
   const dot = root.querySelector('.cursor-dot');
   const ring = root.querySelector('.cursor-ring');
   const label = root.querySelector('.cursor-label');
-  document.documentElement.classList.add('has-cursor');
+  // "Pause animations" also hands back the native cursor.
+  const sync = () => document.documentElement.classList.toggle('has-cursor', !motion.paused);
+  sync();
+  document.addEventListener('motion:change', sync);
 
   const pos = { x: -100, y: -100 };
   const lag = { x: -100, y: -100 };

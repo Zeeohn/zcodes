@@ -1,7 +1,7 @@
 // Skills constellation: the grouped skill list (the accessible source of truth)
 // is mirrored onto a draggable 3D sphere of tags joined by constellation lines.
 // Hovering or focusing a skill highlights the work cards that used it.
-import { reducedMotion, pixelRatio, renderLoop, onResize } from './util.js';
+import { reducedMotion, lowPower, pixelRatio, renderLoop, onResize } from './util.js';
 
 export function initSkills(section, work) {
   const sphere = section.querySelector('.sphere');
@@ -143,7 +143,7 @@ export function initSkills(section, work) {
     if (reducedMotion && !dragging && Math.abs(vel.y) + Math.abs(vel.x) > 0.01) requestAnimationFrame(() => loop.invalidate());
   };
 
-  const loop = renderLoop(sphere, frame, { continuous: !reducedMotion });
+  const loop = renderLoop(sphere, frame, { continuous: !reducedMotion, fps: lowPower ? 30 : 60 });
   onResize(sphere, (w) => {
     size = w;
     canvas.width = w * pixelRatio();

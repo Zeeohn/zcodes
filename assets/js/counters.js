@@ -1,10 +1,10 @@
 // Impact counters: each digit becomes a vertical strip (two 0–9 cycles) that
 // rolls into place when the stat scrolls into view. The real value stays in
-// the DOM for screen readers; with reduced motion nothing is touched.
-import { reducedMotion } from './util.js';
+// the DOM for screen readers; with reduced motion (or animations paused) nothing is touched.
+import { reducedMotion, motion } from './util.js';
 
 export function initCounters(root = document) {
-  if (reducedMotion) return;
+  if (reducedMotion || motion.paused) return;
   const counters = root.querySelectorAll('.counter');
 
   const io = new IntersectionObserver((entries) => {
