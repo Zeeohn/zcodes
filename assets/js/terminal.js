@@ -66,7 +66,12 @@ export function initTerminal({ openCase }) {
         document.querySelectorAll('#career .event').forEach((ev) => {
           const [offset, dates] = [...ev.querySelectorAll('.event-head span')].map((s) => s.textContent);
           const company = ev.querySelector('h3').firstChild.textContent.trim();
-          print(`${offset}  ${dates.padEnd(20)} ${company} · ${ev.querySelector('.event-role').firstChild.textContent.trim()}`);
+          const role = ev.querySelector('.event-role').firstChild.textContent.trim();
+          const site = ev.querySelector('.event-site a');
+          const line = document.createElement('span');
+          line.append(`${offset}  ${dates.padEnd(20)} ${company} · ${role}`);
+          if (site) line.append('  ', link(site.href, new URL(site.href).hostname.replace(/^www\./, '')));
+          print(line);
         });
         return;
       case 'skills':

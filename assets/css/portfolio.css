@@ -182,7 +182,7 @@ body[data-tone="brand"] .tone-brand, body[data-tone="cool"] .tone-cool, body[dat
 @property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @keyframes ring { to { --a: 360deg; } }
 /* Line breaks are explicit (<br>) so the line count, and so the layout, never depends on which font has loaded. */
-.hero-title { font-size: clamp(2.45rem, 7.6vw, 6.6rem); line-height: .98; letter-spacing: -.04em; margin-bottom: .32em; }
+.hero-title { font-size: clamp(2.45rem, 5.6vw, 5.4rem); line-height: .98; letter-spacing: -.04em; margin-bottom: .32em; }
 .hero-title em { font-style: normal; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero-sub { max-width: 52ch; color: var(--muted); font: 500 clamp(.82rem, 1.2vw, .95rem)/1.7 var(--font-mono); }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 20px; }
@@ -192,20 +192,17 @@ body[data-tone="brand"] .tone-brand, body[data-tone="cool"] .tone-cool, body[dat
 .scroll-cue span { width: 1px; height: 28px; background: linear-gradient(var(--text), transparent); animation: cue 1.8s ease-in-out infinite; transform-origin: top; }
 @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
 
-/* Kinetic headline (split by main.js into words/letters) */
-.hero-title .w { display: inline-block; overflow: hidden; vertical-align: top; padding: .02em .02em .12em; margin: -.02em -.02em -.12em; }
-.hero-title .l, .hero-title .wi { display: inline-block; transform: translateY(108%); }
-.hero-title .wi { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero-title em .w { overflow: hidden; }
-.hero-title.is-in .l, .hero-title.is-in .wi { transform: none; transition: transform .9s var(--ease-out) calc(var(--i) * 22ms); }
-.hero-title.split em { background: none; color: inherit; }
+/* Typewriter headline (typer.js): three fixed lines, so swapping phrases never moves the layout */
+.typer { display: block; min-height: 2.94em; }
+.typer-accent { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.typer-caret { display: inline-block; width: .07em; height: .82em; margin-left: .05em; vertical-align: -.04em; border-radius: 2px; background: linear-gradient(var(--violet-text), var(--coral-text)); animation: caret 1.05s steps(1, end) infinite; }
+.typer.is-typing .typer-caret, .motion-paused .typer-caret { animation: none; }
+@keyframes caret { 50% { opacity: 0; } }
 
 @media (prefers-reduced-motion: no-preference) {
-  .js .hero-title:not(.split) { opacity: 0; animation: reveal-fallback 0s 2.5s forwards; }
   .js:not(.no-webgl) .hero-track { height: 150vh; }
   .js:not(.no-webgl) .hero-stage { position: sticky; top: 0; height: 100vh; height: 100svh; }
 }
-@keyframes reveal-fallback { to { opacity: 1; } }
 
 @media (max-width: 860px) {
   .hero-canvas { width: 100%; top: var(--nav-h); bottom: auto; height: 32%; }
@@ -282,6 +279,10 @@ html:not(.js) .node-inspector, .no-webgl .node-inspector, .is-fallback .node-ins
 .event.is-current article { border-color: rgba(196,167,255,.45); box-shadow: 0 24px 60px -30px rgba(124,58,237,.9); }
 .event-role { margin: 4px 0 2px; font-weight: 600; }
 .event-place { color: var(--muted); font-size: .88rem; margin-bottom: 12px; }
+.event-site { margin: -6px 0 12px; font-size: .86rem; }
+.site-link { color: var(--teal-text); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(94,234,212,.35); }
+.site-link:hover { border-color: var(--teal-text); }
+.case-live { margin-top: 10px; }
 .event-points { display: grid; gap: 8px; margin-bottom: 16px; font-size: .95rem; line-height: 1.6; color: #D5DCE8; }
 .event-points li { position: relative; padding-left: 16px; }
 .event-points li::before { content: ""; position: absolute; left: 0; top: .68em; width: 6px; height: 1px; background: var(--muted); }
@@ -417,6 +418,7 @@ html:not(.js) .filters { display: none; }
 /* ---------- 06 Skills ---------- */
 .skills-grid { display: grid; gap: 40px; align-items: center; }
 @media (min-width: 1000px) { .skills-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+.skills { overflow-x: clip; } /* safety net: a tag at the sphere's edge must never cause sideways scroll */
 .sphere { position: relative; aspect-ratio: 1; width: 100%; max-width: 580px; margin-inline: auto; touch-action: pan-y; user-select: none; }
 html:not(.js) .sphere { display: none; }
 .sphere canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -470,7 +472,15 @@ html:not(.js) .skill-group li > * { padding: 0; border: 0; background: none; }
 .api-response { margin: 12px 16px 16px; padding: 14px 16px; border: 1px solid rgba(34,197,94,.35); border-radius: 12px; background: rgba(34,197,94,.06); }
 .api-response.is-on { animation: pop .5s var(--ease-out) both; }
 .api-response p { margin: 0 0 8px; font-size: .82rem; }
-.code-201 { color: #4ADE80; font-weight: 700; }
+.api-status { font-weight: 700; }
+.code-ok { color: #4ADE80; }
+.code-err { color: var(--coral-text); }
+.api-response:has(.code-err) { border-color: rgba(242,85,90,.4); background: rgba(242,85,90,.06); }
+.api-fallback { display: inline-block; margin-top: 10px; color: var(--indigo-text); font-weight: 600; }
+.api-note { margin: 0 16px 14px; color: var(--muted); font-size: .78rem; }
+/* Honeypot: off-screen rather than display:none, which some bots skip */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+form[aria-busy="true"] .btn { cursor: progress; }
 .api-response pre { margin: 0; font-size: .8rem; line-height: 1.6; color: #CBD5E1; white-space: pre-wrap; }
 
 /* ---------- Footer ---------- */
