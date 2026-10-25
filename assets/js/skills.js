@@ -25,7 +25,7 @@ export function initSkills(section, work) {
     btn.className = 'skill-btn';
     btn.textContent = li.textContent;
     li.replaceChildren(btn);
-    return { id: li.dataset.skill, name: btn.textContent, group: group.dataset.group, color: getComputedStyle(group).getPropertyValue('--c').trim(), btn };
+    return { id: li.dataset.skill, name: btn.textContent, learning: li.classList.contains('is-learning'), group: group.dataset.group, color: getComputedStyle(group).getPropertyValue('--c').trim(), btn };
   });
 
   // ---- Highlighting
@@ -43,7 +43,7 @@ export function initSkills(section, work) {
     if (!skill) return;
     readout.replaceChildren(`${skill.name} → `);
     if (!used.length) {
-      readout.append('everyday toolkit; no featured case study tagged with it yet.');
+      readout.append(skill.learning ? 'currently learning it; nothing shipped with it yet.' : 'everyday toolkit; no featured case study tagged with it yet.');
       return;
     }
     readout.append('used in ');
