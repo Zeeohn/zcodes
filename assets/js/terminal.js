@@ -2,7 +2,7 @@
 // the page itself (cards, event log, skill list) so it never drifts from it.
 
 const EMAIL = 'successzion21@gmail.com';
-const COMMANDS = ['help', 'whoami', 'ls projects', 'cat experience', 'skills', 'contact', 'hire', 'sudo hire-zion', 'open', 'shortcut on', 'shortcut off', 'clear', 'exit'];
+const COMMANDS = ['help', 'whoami', 'ls projects', 'cat experience', 'skills', 'contact', 'cv', 'hire', 'sudo hire-zion', 'open', 'shortcut on', 'shortcut off', 'clear', 'exit'];
 const SHORTCUT_KEY = 'zs-shortcut';
 
 export function initTerminal({ openCase }) {
@@ -47,6 +47,7 @@ export function initTerminal({ openCase }) {
           'cat experience    the career event log',
           'skills            the toolkit, grouped',
           'contact           how to reach me',
+          'cv                request a CV tailored to your role',
           'hire              jump to the request form',
           'sudo hire-zion    you know you want to',
           'shortcut on|off   enable or disable the ` key shortcut',
@@ -85,6 +86,14 @@ export function initTerminal({ openCase }) {
         print(lines);
         return;
       }
+      case 'cv':
+      case 'cat cv':
+        print('cat: cv: encrypted at rest. Request an access code for your role →', 't-dim');
+        setTimeout(() => {
+          close({ restoreFocus: false });
+          document.dispatchEvent(new CustomEvent('nav:goto', { detail: { selector: '#cv', focus: '#cv-name' } }));
+        }, 450);
+        return;
       case 'hire':
         print('→ routing you to POST /v1/hire-zion …', 't-ok');
         setTimeout(() => {
