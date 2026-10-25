@@ -3,6 +3,13 @@
 // Hovering or focusing a skill highlights the work cards that used it.
 import { reducedMotion, lowPower, pixelRatio, renderLoop, onResize } from './util.js';
 
+// Shorter labels for the sphere only; the list (and screen readers) keep the full names.
+const SHORT = {
+  'System Design & Architecture': 'System Design',
+  'Redux Toolkit & Context API': 'Redux Toolkit',
+  'AI-Driven Development': 'AI-Driven Dev',
+};
+
 export function initSkills(section, work) {
   const sphere = section.querySelector('.sphere');
   const canvas = sphere.querySelector('canvas');
@@ -63,7 +70,7 @@ export function initSkills(section, work) {
     const r = Math.sqrt(1 - y * y);
     const phi = i * Math.PI * (3 - Math.sqrt(5));
     s.p = [Math.cos(phi) * r, y, Math.sin(phi) * r];
-    s.tag = Object.assign(document.createElement('span'), { className: 'sphere-tag', textContent: s.name });
+    s.tag = Object.assign(document.createElement('span'), { className: 'sphere-tag', textContent: SHORT[s.name] || s.name });
     s.tag.style.setProperty('--c', s.color);
     s.tag.addEventListener('pointerenter', () => highlight(s));
     tagLayer.append(s.tag);
@@ -73,6 +80,7 @@ export function initSkills(section, work) {
   const rot = { x: -0.25, y: 0 };
   const vel = { x: 0, y: reducedMotion ? 0 : 0.12 };
   let size = 1;
+  let radius = 0.36;
   let dragging = null;
 
   sphere.addEventListener('pointerdown', (e) => {
@@ -103,7 +111,7 @@ export function initSkills(section, work) {
     const y1 = y * cx - z1 * sx;
     const z2 = y * sx + z1 * cx;
     const k = 2.6 / (2.6 - z2);
-    const R = size * 0.36;
+    const R = radius;
     return { x: size / 2 + x1 * R * k, y: size / 2 + y1 * R * k, z: z2, k };
   };
 
@@ -146,6 +154,9 @@ export function initSkills(section, work) {
   const loop = renderLoop(sphere, frame, { continuous: !reducedMotion, fps: lowPower ? 30 : 60 });
   onResize(sphere, (w) => {
     size = w;
+    // Keep the widest tag (scaled up to 1.1 at the front) inside the sphere's box on narrow screens.
+    const halfTag = Math.max(...skills.map((s) => s.tag.offsetWidth)) * 0.55;
+    radius = Math.max(w * 0.22, Math.min(w * 0.36, w / 2 - halfTag));
     canvas.width = w * pixelRatio();
     canvas.height = w * pixelRatio();
     ctx.setTransform(pixelRatio(), 0, 0, pixelRatio(), 0, 0);
