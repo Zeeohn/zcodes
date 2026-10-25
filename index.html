@@ -738,11 +738,12 @@
         <p class="cli-teaser">Prefer a CLI? Press <kbd>`</kbd> (or use the nav terminal button) and type <code>hire</code>.</p>
       </div>
 
-      <form class="api" id="hire-form" action="mailto:successzion21@gmail.com" method="post" enctype="text/plain" data-reveal>
+      <!-- No action attribute: a mailto: form action triggers a mixed-content warning on HTTPS. main.js builds the mailto link and enables Send. -->
+      <form class="api" id="hire-form" data-reveal>
         <div class="api-bar">
           <span class="api-method">POST</span>
           <span class="api-url mono">/v1/hire-zion</span>
-          <button type="submit" class="btn btn-small" data-magnetic>Send</button>
+          <button type="submit" class="btn btn-small" data-magnetic disabled>Send</button>
         </div>
         <p class="api-tabs mono"><span class="on">Body</span><span>JSON</span><span class="dim">Content-Type: application/json</span></p>
         <div class="json mono">
@@ -761,6 +762,7 @@
           </div>
           <span class="j-p">}</span>
         </div>
+        <noscript><p class="api-error">Sending needs JavaScript. Email <a href="mailto:successzion21@gmail.com">successzion21@gmail.com</a> directly instead.</p></noscript>
         <p class="api-error" role="alert"></p>
         <div class="api-response" hidden>
           <p class="mono"><span class="code-201">201 Created</span> <span class="dim">· 0.8s</span></p>

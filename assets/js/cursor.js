@@ -9,10 +9,18 @@ export function initCursor() {
   const dot = root.querySelector('.cursor-dot');
   const ring = root.querySelector('.cursor-ring');
   const label = root.querySelector('.cursor-label');
-  // "Pause animations" also hands back the native cursor.
-  const sync = () => document.documentElement.classList.toggle('has-cursor', !motion.paused);
+  // Hand back the native cursor when animations are paused, and while any modal
+  // dialog is open: modals render in the browser's top layer, above every z-index,
+  // so the custom cursor would be hidden behind them and the pointer would vanish.
+  const dialogs = [...document.querySelectorAll('dialog')];
+  const sync = () => {
+    const modalOpen = dialogs.some((d) => d.open);
+    document.documentElement.classList.toggle('has-cursor', !motion.paused && !modalOpen);
+  };
   sync();
   document.addEventListener('motion:change', sync);
+  const watch = new MutationObserver(sync);
+  dialogs.forEach((d) => watch.observe(d, { attributes: true, attributeFilter: ['open'] }));
 
   const pos = { x: -100, y: -100 };
   const lag = { x: -100, y: -100 };

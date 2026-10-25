@@ -236,6 +236,7 @@ function initContact() {
   };
 
   form.noValidate = true;
+  $('[type="submit"]', form).disabled = false; // disabled in HTML so the no-JS form can't submit to the page URL
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const fields = $$('input, textarea', form);
