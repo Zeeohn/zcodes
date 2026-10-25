@@ -35,6 +35,11 @@ checked; see "Security" below).
 6. Send yourself a test request from the live site. If the first one lands in Spam,
    mark it **Not spam** so later ones go to the inbox.
 
+**CV requests** from the "Request a CV" section use this same relay. Their message
+starts with `CV REQUEST: <role>`; from the version of `Code.gs` that recognises it, they
+arrive with the subject "CV request (<role>) from <name>". An older deployment still
+delivers them, under the usual "Hire request from" subject.
+
 **Changing the script later:** edit it, then go to **Deploy → Manage deployments →
 ✏️ → Version: New version → Deploy**. The URL stays the same.
 
