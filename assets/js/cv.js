@@ -1,92 +1,165 @@
-// "Request a CV": the CV is never published in readable form. Visitors pick a
-// role and request access (sent to Zion's inbox through the contact relay, or a
-// prefilled email if the relay is unavailable); Zion replies with an
-// access code or a magic link (#cv=CODE). The code decrypts assets/cv/cv.enc.json
-// in the browser and a PDF tailored to the chosen role is generated on the spot.
-// Format and parameters must match assets/cv/encrypt-cv.mjs.
-
+// CV downloads: one PDF per role. The first download asks for a name and email
+// (remembered for the visit); after that every version downloads in one click.
+//
+// The CV text is not in the HTML or in any plain-text file: assets/cv/cv.enc.json
+// holds it AES-GCM encrypted, so crawlers and scrapers that read files never see
+// it. The PDF is assembled in the browser from that source, warmed up while the
+// section scrolls into view so the click feels instant. Each first download also
+// notifies Zion through the contact relay (in the background; it never blocks).
 import { relaySend, clean } from './contact.js';
 
-const EMAIL = 'successzion21@gmail.com';
 const BLOB_URL = 'assets/cv/cv.enc.json';
-const ROLE_TITLES = {
+// Not a secret: keeps the text out of crawlable files. Must match encrypt-cv.mjs.
+const SITE_KEY = 'zcodes-cv-v2';
+const READER_KEY = 'zs-cv-reader';
+const ROLES = {
   fullstack: 'Full-Stack Engineer',
   backend: 'Backend Engineer',
   frontend: 'Frontend Engineer',
   solutions: 'Integrations & Solutions Engineer',
 };
-
+const fileName = (role) => `Zion-Success-CV-${ROLES[role].replace(/[^A-Za-z]+/g, '-').replace(/-$/, '')}.pdf`;
 const fromB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
-const normaliseCode = (code) => code.toUpperCase().replace(/[^0-9A-Z]/g, '').replace(/O/g, '0').replace(/[IL]/g, '1');
 
-class AccessError extends Error {}
-
-/** Derives the code's key, unwraps the data key and decrypts the CV source. */
-async function decryptCv(code) {
-  const { subtle } = globalThis.crypto ?? {};
-  if (!subtle) throw new Error('This browser cannot decrypt the CV (WebCrypto needs HTTPS).');
+let source = null;
+/** Fetches and decrypts the CV source once; later calls reuse it. */
+const loadSource = () => (source ||= (async () => {
   const blob = await (await fetch(BLOB_URL)).json();
-  const normalised = normaliseCode(code);
-  const entry = normalised.length === 16 && blob.keys.find((k) => k.id === normalised.slice(0, 4));
-  if (!entry) throw new AccessError();
+  const { subtle } = crypto;
+  const material = await subtle.importKey('raw', new TextEncoder().encode(SITE_KEY), 'PBKDF2', false, ['deriveKey']);
+  const key = await subtle.deriveKey(
+    { name: 'PBKDF2', hash: 'SHA-256', salt: fromB64(blob.salt), iterations: blob.iterations },
+    material, { name: 'AES-GCM', length: 256 }, false, ['decrypt'],
+  );
+  const plain = await subtle.decrypt({ name: 'AES-GCM', iv: fromB64(blob.iv) }, key, fromB64(blob.data));
+  return JSON.parse(new TextDecoder().decode(plain));
+})().catch((err) => {
+  source = null; // allow a retry
+  throw err;
+}));
+const loadBuilder = () => import('./cv-pdf.js');
+
+const readReader = () => {
   try {
-    const material = await subtle.importKey('raw', new TextEncoder().encode(normalised), 'PBKDF2', false, ['deriveKey']);
-    const kek = await subtle.deriveKey(
-      { name: 'PBKDF2', hash: blob.kdf.hash, salt: fromB64(entry.salt), iterations: blob.kdf.iterations },
-      material, { name: 'AES-GCM', length: 256 }, false, ['decrypt'],
-    );
-    const rawKey = await subtle.decrypt({ name: 'AES-GCM', iv: fromB64(entry.iv) }, kek, fromB64(entry.key));
-    const dataKey = await subtle.importKey('raw', rawKey, 'AES-GCM', false, ['decrypt']);
-    const plain = await subtle.decrypt({ name: 'AES-GCM', iv: fromB64(blob.iv) }, dataKey, fromB64(blob.data));
-    return JSON.parse(new TextDecoder().decode(plain));
+    return JSON.parse(sessionStorage.getItem(READER_KEY));
   } catch {
-    throw new AccessError(); // a wrong code fails GCM authentication
+    return null;
   }
-}
+};
+const saveReader = (reader) => {
+  try {
+    sessionStorage.setItem(READER_KEY, JSON.stringify(reader));
+  } catch {
+    /* storage blocked: they'll be asked again next time */
+  }
+};
 
 export function initCv({ say }) {
   const section = document.querySelector('#cv');
-  const roleInput = () => section.querySelector('input[name="role"]:checked');
-  const requestForm = section.querySelector('#cv-request');
-  const requestError = requestForm.querySelector('.api-error');
-  const requestOk = requestForm.querySelector('.api-response');
-  const requestSubmit = requestForm.querySelector('[type="submit"]');
+  const tiles = [...section.querySelectorAll('.cv-file')];
+  const gate = section.querySelector('#cv-gate');
+  const gateError = gate.querySelector('.api-error');
+  const status = section.querySelector('.cv-status');
   const endpoint = document.querySelector('#hire-form')?.dataset.endpoint?.trim();
+  let reader = readReader();
+  let pendingRole = null;
   let startedAt = 0;
-  let sending = false;
-  const unlockForm = section.querySelector('#cv-unlock');
-  const codeInput = unlockForm.querySelector('#cv-code');
-  const forInput = unlockForm.querySelector('#cv-for');
-  const status = unlockForm.querySelector('.cv-status');
-  const submit = unlockForm.querySelector('button[type="submit"]');
-  let cv = null; // decrypted source, kept in memory so other roles need no new code
-  let lastUrl = '';
+  let busy = false;
 
-  const show = (el) => {
-    el.hidden = false;
-    el.classList.remove('is-on');
-    void el.offsetWidth; // restart the entrance animation
-    el.classList.add('is-on');
+  // Warm up before the click: source, decryption and the PDF builder.
+  new IntersectionObserver(([entry], io) => {
+    if (!entry.isIntersecting) return;
+    io.disconnect();
+    loadSource().catch(() => {});
+    loadBuilder().catch(() => {});
+  }, { rootMargin: '600px 0px' }).observe(section);
+
+  const setStatus = (nodes, cls = '') => {
+    status.className = `cv-status mono ${cls}`.trim();
+    status.replaceChildren(...nodes);
   };
 
-  // ---- Step 1: request access (relay → Zion's inbox; a prefilled email if the relay is unavailable)
-  requestForm.noValidate = true;
-  requestSubmit.disabled = false; // disabled in HTML so the no-JS form can't submit to the page URL
-  requestForm.addEventListener('focusin', () => (startedAt ||= performance.now()));
-  const answer = (code, cls, text, mailHref) => {
-    const head = requestOk.querySelector('.api-status');
-    head.textContent = code;
-    head.className = `api-status code-${cls}`;
-    requestOk.querySelector('.cv-next').textContent = text;
-    const fallback = requestOk.querySelector('.cv-mail-fallback');
-    fallback.hidden = !mailHref;
-    if (mailHref) fallback.href = mailHref;
-    show(requestOk);
+  async function download(role, opener) {
+    if (busy) return;
+    busy = true;
+    tiles.forEach((t) => t.setAttribute('aria-busy', String(t.dataset.role === role)));
+    // Only show progress if it takes noticeably long (first click on a slow connection).
+    const slow = setTimeout(() => setStatus([`Preparing ${fileName(role)}…`]), 250);
+    try {
+      const [cv, { buildCvPdf }] = await Promise.all([loadSource(), loadBuilder()]);
+      const bytes = await buildCvPdf(cv, role);
+      const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+      const link = Object.assign(document.createElement('a'), { href: url, download: fileName(role), textContent: 'Download again' });
+      link.click();
+      clearTimeout(slow);
+      setStatus([Object.assign(document.createElement('span'), { className: 'code-ok', textContent: '200 OK' }), ` ${fileName(role)} · `, link], 'is-ok');
+      say('Download started ✓');
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      clearTimeout(slow);
+      const mail = Object.assign(document.createElement('a'), {
+        href: `mailto:successzion21@gmail.com?subject=${encodeURIComponent(`CV: ${ROLES[role]}`)}`,
+        textContent: 'email me',
+      });
+      setStatus(['The download didn\'t start. Please try again, or ', mail, ' and I\'ll send it.'], 'is-err');
+    } finally {
+      busy = false;
+      tiles.forEach((t) => t.removeAttribute('aria-busy'));
+      opener?.focus({ preventScroll: true });
+    }
+  }
+
+  /** Lets Zion know who downloaded what. Once per visit; failures are ignored. */
+  function notify(role) {
+    if (!endpoint || reader.notified) return;
+    reader.notified = true;
+    saveReader(reader);
+    const message = [
+      `CV DOWNLOAD: ${ROLES[role]}`,
+      `Company: ${reader.company || '(not given)'}`,
+      '',
+      'Downloaded from the portfolio. No action needed; reply to follow up.',
+    ].join('\n');
+    relaySend(endpoint, { name: reader.name, email: reader.email, message }, { website: gate.elements.website.value, startedAt }).catch(() => {});
+  }
+
+  const openGate = (role, tile) => {
+    pendingRole = role;
+    gate.dataset.opener = tiles.indexOf(tile);
+    gate.querySelector('.cv-gate-file').textContent = fileName(role);
+    gate.hidden = false;
+    tiles.forEach((t) => t.setAttribute('aria-expanded', String(t === tile)));
+    gate.elements.name.focus();
   };
-  requestForm.addEventListener('submit', async (e) => {
+  const closeGate = () => {
+    gate.hidden = true;
+    tiles.forEach((t) => t.setAttribute('aria-expanded', 'false'));
+    tiles[gate.dataset.opener]?.focus();
+  };
+
+  tiles.forEach((tile) => {
+    tile.setAttribute('aria-controls', 'cv-gate');
+    tile.setAttribute('aria-expanded', 'false');
+    tile.addEventListener('click', () => {
+      const role = tile.dataset.role;
+      if (reader) {
+        download(role, tile);
+        notify(role);
+      } else {
+        openGate(role, tile);
+      }
+    });
+  });
+
+  gate.noValidate = true;
+  gate.addEventListener('focusin', () => (startedAt ||= performance.now()));
+  gate.querySelector('.cv-cancel').addEventListener('click', closeGate);
+  gate.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeGate();
+  });
+  gate.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (sending) return;
-    const fields = [...requestForm.querySelectorAll('.json input')];
+    const fields = [...gate.querySelectorAll('.json input')];
     const bad = fields.filter((f) => {
       f.value = f.value.trim();
       const invalid = !f.checkValidity();
@@ -95,112 +168,22 @@ export function initCv({ say }) {
       return invalid;
     });
     if (bad.length) {
-      requestError.textContent = `422 Unprocessable Entity: check ${bad.map((f) => `"${f.name}"`).join(', ')}.`;
+      gateError.textContent = `Please check your ${bad.map((f) => f.name).join(' and ')}.`;
       bad[0].focus();
       return;
     }
-    requestError.textContent = '';
-    const role = ROLE_TITLES[roleInput().value];
-    const name = clean(requestForm.elements.name.value, 120);
-    const email = clean(requestForm.elements.email.value, 200).toLowerCase();
-    const company = clean(requestForm.elements.company.value, 120);
-    const message = [
-      `CV REQUEST: ${role}`,
-      `Company: ${company || '(not given)'}`,
-      '',
-      `Please send ${name} an access code (or a #cv= link) for the ${role} CV.`,
-    ].join('\n');
-    const subject = `CV request: ${role} — ${name}${company ? ` (${company})` : ''}`;
-    const mailHref = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${message}\n\nReply to: ${email}\n`)}`;
-
-    if (!endpoint) {
-      location.href = mailHref;
-      answer('202 Accepted', 'ok', 'Your mail app opened with the request; hit send there. I reply with an access code, usually within a day or two.', mailHref);
-      say('Opening your mail app…');
-      return;
-    }
-    sending = true;
-    requestSubmit.disabled = true;
-    requestForm.setAttribute('aria-busy', 'true');
-    try {
-      const result = await relaySend(endpoint, { name, email, message }, {
-        website: requestForm.elements.website.value,
-        startedAt,
-        onStage: (label) => (requestSubmit.textContent = label),
-      });
-      if (result.ok) {
-        answer('202 Accepted', 'ok', `Request received. I'll email ${email} an access code for the ${role} CV, usually within a day or two.`);
-        requestForm.querySelectorAll('.json input').forEach((f) => (f.value = ''));
-        startedAt = 0;
-        say('CV request sent ✓');
-      } else {
-        const [code, cls, body] = result.status;
-        answer(code, cls, `${body.error || 'The request could not be sent.'} You can send it as an email instead:`, mailHref);
-      }
-    } catch {
-      answer('503 Service Unavailable', 'err', 'The relay is unreachable right now. You can send the request as an email instead:', mailHref);
-    } finally {
-      sending = false;
-      requestSubmit.disabled = false;
-      requestSubmit.textContent = 'Request access';
-      requestForm.removeAttribute('aria-busy');
-    }
+    gateError.textContent = '';
+    reader = {
+      name: clean(gate.elements.name.value, 120),
+      email: clean(gate.elements.email.value, 200).toLowerCase(),
+      company: clean(gate.elements.company.value, 120),
+    };
+    saveReader(reader);
+    const role = pendingRole;
+    const opener = tiles[gate.dataset.opener];
+    gate.hidden = true;
+    tiles.forEach((t) => t.setAttribute('aria-expanded', 'false'));
+    download(role, opener);
+    notify(role);
   });
-
-  // ---- Step 2: unlock with the access code and generate the tailored PDF
-  unlockForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const role = roleInput().value;
-    status.hidden = false;
-    status.className = 'cv-status mono';
-    submit.disabled = true;
-    try {
-      if (!cv) {
-        if (!codeInput.value.trim()) {
-          codeInput.setAttribute('aria-invalid', 'true');
-          codeInput.focus();
-          throw new AccessError('Enter the access code from your email.');
-        }
-        status.textContent = '… verifying access code';
-        cv = await decryptCv(codeInput.value);
-        codeInput.removeAttribute('aria-invalid');
-      }
-      status.textContent = `… generating the ${ROLE_TITLES[role]} CV`;
-      const { buildCvPdf } = await import('./cv-pdf.js');
-      const bytes = await buildCvPdf(cv, role, { preparedFor: forInput.value.trim() });
-      if (lastUrl) URL.revokeObjectURL(lastUrl);
-      lastUrl = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-      const filename = `Zion-Success-CV-${ROLE_TITLES[role].replace(/[^A-Za-z]+/g, '-').replace(/-$/, '')}.pdf`;
-      const link = Object.assign(document.createElement('a'), { href: lastUrl, download: filename, textContent: `Download ${filename}` });
-      status.classList.add('is-ok');
-      status.replaceChildren(Object.assign(document.createElement('span'), { className: 'code-ok', textContent: '200 OK' }), ' CV generated. ', link);
-      link.click();
-      say('CV downloaded ✓');
-    } catch (err) {
-      status.classList.add('is-err');
-      if (err instanceof AccessError) {
-        status.textContent = `401 Unauthorized: ${err.message || 'that access code is not valid. Check it, or request one above.'}`;
-        codeInput.setAttribute('aria-invalid', 'true');
-      } else {
-        status.textContent = `503: ${err.message || 'could not generate the CV. Please try again.'}`;
-      }
-    } finally {
-      submit.disabled = false;
-    }
-  });
-
-  // Once unlocked, the code field is no longer needed for other roles.
-  section.addEventListener('change', (e) => {
-    if (e.target.name === 'role' && cv) submit.textContent = `Download ${ROLE_TITLES[e.target.value]} CV`;
-  });
-
-  // ---- Magic link: #cv=CODE (optionally &role=backend). The code is read, then
-  // removed from the address bar so it doesn't linger in screenshots or shares.
-  const m = location.hash.match(/^#cv=([0-9A-Za-z-]+)(?:&role=(\w+))?$/);
-  if (m) {
-    codeInput.value = m[1];
-    if (ROLE_TITLES[m[2]]) section.querySelector(`input[name="role"][value="${m[2]}"]`).checked = true;
-    history.replaceState(null, '', `${location.pathname}${location.search}#cv`);
-    document.dispatchEvent(new CustomEvent('nav:goto', { detail: { selector: '#cv', focus: '#cv-unlock button[type="submit"]' } }));
-  }
 }

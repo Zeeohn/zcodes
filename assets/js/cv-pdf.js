@@ -1,5 +1,7 @@
-// Builds a role-tailored, ATS-friendly CV as a real text PDF (pdf-lib, standard
-// Helvetica). Loaded only after a visitor unlocks the CV, never on page load.
+// Builds the role-specific CV as a real text PDF (pdf-lib, standard Helvetica).
+// Loaded when the CV section nears the viewport, never on first page load. The
+// output carries the source's fixed "updated" date, so every copy of a version is
+// identical: nothing in it depends on who downloads it or when.
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 const PAGE = [595.28, 841.89]; // A4 in points
@@ -41,16 +43,16 @@ export function tailor(cv, role, d = DENSITY[0]) {
   };
 }
 
-export async function buildCvPdf(cv, roleKey, options = {}) {
+export async function buildCvPdf(cv, roleKey) {
   let doc;
   for (const d of DENSITY) {
-    doc = await render(cv, roleKey, options, d);
+    doc = await render(cv, roleKey, d);
     if (doc.getPageCount() <= MAX_PAGES) break;
   }
   return doc.save();
 }
 
-async function render(cv, roleKey, { preparedFor = '' }, d) {
+async function render(cv, roleKey, d) {
   const t = tailor(cv, roleKey, d);
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
@@ -118,11 +120,19 @@ async function render(cv, roleKey, { preparedFor = '' }, d) {
   y -= 2;
   para([person.email, person.phone, person.location].filter(Boolean).join('  ·  '), { size: 8.8, color: MUTED });
   para(person.links.join('  ·  '), { size: 8.8, color: MUTED });
+  if (person.availability) {
+    y -= 1;
+    para(person.availability, { f: bold, size: 9, color: ACCENT });
+  }
   page.drawRectangle({ x: MARGIN, y: y - 6, width: 42, height: 2.2, color: ACCENT });
   y -= 10;
 
   section('Profile');
   para(t.role.summary, { size: 9.4 });
+  if (cv.learning) {
+    y -= 2;
+    para(cv.learning, { size: 9.4 });
+  }
 
   section('Key results');
   t.accomplishments.forEach((a) => bullet(a.text));
@@ -183,12 +193,11 @@ async function render(cv, roleKey, { preparedFor = '' }, d) {
   y -= 2;
   para(`Languages: ${person.languages}`, { size: 9 });
 
-  // ---- Footers: who it was prepared for, date, page numbers
+  // ---- Footers: name, role and page numbers
   const pages = doc.getPages();
-  const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const left = clean(`${person.name} · ${t.role.title}`);
   pages.forEach((p, i) => {
-    const right = clean(`${preparedFor ? `Prepared for ${preparedFor} · ` : ''}${date} · ${i + 1}/${pages.length}`);
+    const right = clean(`${person.email} · ${i + 1}/${pages.length}`);
     p.drawLine({ start: { x: MARGIN, y: MARGIN }, end: { x: MARGIN + WIDTH, y: MARGIN }, thickness: 0.5, color: RULE });
     p.drawText(left, { x: MARGIN, y: MARGIN - 12, size: 7.5, font, color: MUTED });
     p.drawText(right, { x: MARGIN + WIDTH - font.widthOfTextAtSize(right, 7.5), y: MARGIN - 12, size: 7.5, font, color: MUTED });
@@ -196,8 +205,12 @@ async function render(cv, roleKey, { preparedFor = '' }, d) {
 
   doc.setTitle(`${person.name} — ${t.role.title} CV`);
   doc.setAuthor(person.name);
-  doc.setSubject(`CV tailored for ${t.role.label} roles`);
+  doc.setSubject(`${t.role.label} CV`);
   doc.setKeywords([t.role.label, ...t.skills.flatMap((s) => s.items.split(', '))]);
   doc.setCreator('zeeohn.github.io/zcodes');
+  doc.setProducer('ZCODES');
+  const updated = new Date(cv.updated || '2026-01-01');
+  doc.setCreationDate(updated);
+  doc.setModificationDate(updated);
   return doc;
 }

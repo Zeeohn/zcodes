@@ -728,67 +728,50 @@
     </div>
   </section>
 
-  <!-- 07 · CV (request → access code → generated in the browser; never published in readable form) -->
+  <!-- 07 · CV: one PDF per role. Visitors leave their name and email once, then downloads start
+       immediately (assets/js/cv.js). The contact form in 08 is separate. -->
   <section class="section cv" id="cv" aria-labelledby="cv-title" data-tone="brand">
     <div class="wrap cv-grid">
       <div class="cv-copy" data-reveal>
         <p class="section-label">07 / cv</p>
-        <h2 id="cv-title">A CV built for your role.</h2>
-        <p class="lead">Pick the role you're hiring for and request access. I'll reply with an access code, and your browser builds a PDF tailored to that role, on the spot.</p>
+        <h2 id="cv-title">My CV, cut for your role.</h2>
+        <p class="lead">Grab the version that matches the role you're hiring for. Each one leads with the experience that matters most for that job.</p>
         <ul class="cv-points">
-          <li><b>Tailored:</b> the profile, key results, experience and projects that matter for the role come first.</li>
-          <li><b>Private:</b> the CV is only published encrypted, so it can't be scraped or indexed.</li>
-          <li><b>Real PDF:</b> selectable, ATS-friendly text, ready to forward to your hiring team.</li>
+          <li><b>Two pages,</b> ATS-friendly PDF, ready to forward to your hiring team.</li>
+          <li><b>Open to relocation</b> for the right opportunity, or remote in any timezone.</li>
+          <li><b>Prefer to talk first?</b> <a href="#contact" data-focus="#f-name">Send me a message</a>.</li>
         </ul>
       </div>
 
-      <div class="api cv-api" data-reveal>
-        <fieldset class="cv-roles">
-          <legend class="mono">role</legend>
-          <label><input type="radio" name="role" value="fullstack" form="cv-request" checked><span>Full-Stack</span></label>
-          <label><input type="radio" name="role" value="backend" form="cv-request"><span>Backend</span></label>
-          <label><input type="radio" name="role" value="frontend" form="cv-request"><span>Frontend</span></label>
-          <label><input type="radio" name="role" value="solutions" form="cv-request"><span>Integrations &amp; Solutions</span></label>
-        </fieldset>
-
-        <!-- Sent through the same contact relay as the hire form (see assets/js/cv.js). -->
-        <form id="cv-request" class="cv-step">
-          <div class="api-bar">
-            <span class="api-method">POST</span>
-            <span class="api-url mono">/v1/cv-requests</span>
-            <button type="submit" class="btn btn-small" disabled>Request access</button>
-          </div>
+      <div class="api cv-files" data-reveal>
+        <div class="api-bar">
+          <span class="api-method api-get">GET</span>
+          <span class="api-url mono">/cv/</span>
+          <span class="cv-count mono dim">4 files</span>
+        </div>
+        <ul class="cv-list" aria-label="CV versions">
+          <li><button type="button" class="cv-file" data-role="fullstack"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Full-Stack Engineer</b><span class="mono">Zion-Success-CV-Full-Stack-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+          <li><button type="button" class="cv-file" data-role="backend"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Backend Engineer</b><span class="mono">Zion-Success-CV-Backend-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+          <li><button type="button" class="cv-file" data-role="frontend"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Frontend Engineer</b><span class="mono">Zion-Success-CV-Frontend-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+          <li><button type="button" class="cv-file" data-role="solutions"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Integrations &amp; Solutions Engineer</b><span class="mono">Zion-Success-CV-Integrations-Solutions-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+        </ul>
+        <form id="cv-gate" class="cv-gate" hidden>
+          <p class="cv-gate-title"><b class="cv-gate-file"></b></p>
+          <p class="cv-help" id="cv-gate-help">Quick details so I know who's reading; your download starts right away.</p>
           <div class="json mono">
-            <div class="j-row"><label for="cv-name"><span class="j-k">"name"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="&quot;Ada Lovelace&quot;"></span></div>
+            <div class="j-row"><label for="cv-name"><span class="j-k">"name"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="&quot;Ada Lovelace&quot;" aria-describedby="cv-gate-help"></span></div>
             <div class="j-row"><label for="cv-email"><span class="j-k">"email"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="&quot;ada@company.com&quot;"></span></div>
-            <div class="j-row"><label for="cv-company"><span class="j-k">"company"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-company" name="company" type="text" autocomplete="organization" maxlength="120" placeholder="&quot;Analytical Engines Ltd&quot; (optional)"></span></div>
+            <div class="j-row"><label for="cv-company"><span class="j-k">"company"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-company" name="company" type="text" autocomplete="organization" maxlength="120" placeholder="&quot;Analytical Engines&quot; (optional)"></span></div>
           </div>
           <div class="hp" aria-hidden="true"><label for="cv-website">Website</label><input id="cv-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-          <noscript><p class="api-error">Requesting needs JavaScript. Email <a href="mailto:successzion21@gmail.com?subject=CV%20request">successzion21@gmail.com</a> with the role you're hiring for instead.</p></noscript>
           <p class="api-error" role="alert"></p>
-          <div class="api-response" hidden>
-            <p class="mono" role="status"><span class="api-status code-ok">202 Accepted</span></p>
-            <p class="cv-next"></p>
-            <a class="cv-mail-fallback" href="mailto:successzion21@gmail.com?subject=CV%20request" hidden>Send the request as an email →</a>
+          <div class="cv-gate-actions">
+            <button type="submit" class="btn">Download PDF <span aria-hidden="true">↓</span></button>
+            <button type="button" class="link-btn cv-cancel">Cancel</button>
           </div>
         </form>
-
-        <form id="cv-unlock" class="cv-step cv-unlock" autocomplete="off">
-          <div class="api-bar">
-            <span class="api-method api-get">GET</span>
-            <span class="api-url mono">/v1/cv?role=…</span>
-          </div>
-          <div class="cv-unlock-fields">
-            <label for="cv-code" class="mono">access code</label>
-            <input id="cv-code" name="code" type="text" spellcheck="false" autocapitalize="characters" placeholder="XXXX-XXXX-XXXX-XXXX" aria-describedby="cv-code-help">
-            <label for="cv-for" class="mono">prepared for <span class="dim">(optional)</span></label>
-            <input id="cv-for" name="for" type="text" maxlength="60" placeholder="Your company">
-            <p id="cv-code-help" class="cv-help">Already have a code or a link from me? Pick the role above, then generate.</p>
-            <button type="submit" class="btn">Unlock &amp; download CV</button>
-          </div>
-          <p class="cv-status mono" role="status" hidden></p>
-          <noscript><p class="cv-help">Generating the CV needs JavaScript. You can still request it with the form above.</p></noscript>
-        </form>
+        <p class="cv-status mono" role="status"></p>
+        <noscript><p class="cv-help cv-noscript">Downloads need JavaScript. Email <a href="mailto:successzion21@gmail.com?subject=CV%20request">successzion21@gmail.com</a> and I'll send the version you need.</p></noscript>
       </div>
     </div>
   </section>

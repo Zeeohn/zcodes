@@ -47,7 +47,7 @@ export function initTerminal({ openCase }) {
           'cat experience    the career event log',
           'skills            the toolkit, grouped',
           'contact           how to reach me',
-          'cv                request a CV tailored to your role',
+          'cv                download my CV for your role',
           'hire              jump to the request form',
           'sudo hire-zion    you know you want to',
           'shortcut on|off   enable or disable the ` key shortcut',
@@ -88,10 +88,10 @@ export function initTerminal({ openCase }) {
       }
       case 'cv':
       case 'cat cv':
-        print('cat: cv: encrypted at rest. Request an access code for your role →', 't-dim');
+        print('ls /cv/  →  full-stack · backend · frontend · integrations (PDF, 2 pages each)', 't-ok');
         setTimeout(() => {
           close({ restoreFocus: false });
-          document.dispatchEvent(new CustomEvent('nav:goto', { detail: { selector: '#cv', focus: '#cv-name' } }));
+          document.dispatchEvent(new CustomEvent('nav:goto', { detail: { selector: '#cv', focus: '.cv-file' } }));
         }, 450);
         return;
       case 'hire':

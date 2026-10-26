@@ -99,9 +99,9 @@ function handle(e) {
     lock.releaseLock();
   }
 
-  // CV requests (assets/js/cv.js) start with "CV REQUEST: <role>"; give them their own subject.
-  const cvRole = (message.match(/^CV REQUEST: (.{1,60})$/m) || [])[1];
-  const subject = (score >= 2 ? '[possible spam] ' : '') + (cvRole ? 'CV request (' + cvRole + ') from ' : 'Hire request from ') + name;
+  // CV download notices (assets/js/cv.js) start with "CV DOWNLOAD: <role>"; give them their own subject.
+  const cvRole = (message.match(/^CV DOWNLOAD: (.{1,60})$/m) || [])[1];
+  const subject = (score >= 2 ? '[possible spam] ' : '') + (cvRole ? 'CV downloaded (' + cvRole + ') by ' : 'Hire request from ') + name;
   const body = [
     'New request from the portfolio contact form (' + SITE_ORIGIN + ')',
     '',
