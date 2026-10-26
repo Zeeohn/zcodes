@@ -61,7 +61,55 @@ the relay, so they work even if it's down.
 
 **Privacy.** Messages go only to your inbox. The script stores no message content: it
 keeps short-lived counters, a hash of the sender's address for the hourly limit, and
-the hashes of used stamps. There are no cookies and no trackers.
+the hashes of used stamps. There are no cookies; visit analytics (below) are first-party and described in the site footer.
 
 **Tuning.** All limits are in `LIMITS` at the top of `Code.gs`. The proof-of-work
 difficulty (`powBits`) must match `DIFFICULTY` in `assets/js/contact.js`.
+
+## Visit analytics
+
+The same script records visits to the portfolio (sent by `assets/js/analytics.js`) in
+a Google Sheet in this account's Drive, serves a private dashboard and emails a daily
+summary. No third-party analytics service is involved; the only outside call is the
+visitor's browser asking GeoJS for an approximate location (city, region, country and
+the network's organisation, which for company networks is the company). The IP
+address is never sent here or stored.
+
+### Turn it on (once, about 3 minutes)
+
+1. Paste the latest `Code.gs` over the old one and save.
+2. **Deploy → Manage deployments → ✏️ → Version: New version → Deploy.** The URL stays
+   the same.
+3. In the editor's function menu, pick **setup** and click **Run**. Google asks for the
+   new permissions (create the spreadsheet, schedule the digest); allow them.
+   `setup` creates the "Portfolio analytics" spreadsheet, a secret dashboard key and
+   the daily digest trigger, then emails you the private dashboard link.
+4. Open `https://zeeohn.github.io/zcodes/?owner=1` once in each browser you use, so
+   your own visits aren't counted (`?owner=0` undoes it).
+
+Until step 3 runs, the site's beacons are still accepted and the sheet is created on
+the first visit; you just won't have the dashboard key or the digest yet.
+
+### What you get
+
+- **Dashboard** (`…/exec?view=dashboard&key=…`, 7/30/90/365-day ranges): visitors,
+  visits, returning visitors, engaged time, scroll depth, bounce rate; visits per day;
+  countries, cities, networks/companies, sources (referrers and `utm_` campaigns);
+  devices, browsers, OS, languages; how far people get through the sections; case
+  studies opened, outbound clicks (GitHub, LinkedIn, product docs), CV downloads by
+  role, contact messages; **people who identified themselves** (via the CV or contact
+  form) with their company, location and every visit since; and the latest 80 visits
+  in detail. Keep the link private: anyone with it can see the data.
+- **Daily digest** at 08:00 in the script's timezone (Project settings): totals, top
+  locations, networks and sources, identified people and every visit that lasted a
+  minute or more. No email on days without visits.
+- **Raw data**: the "Visits" sheet, one row per beacon, for your own filters or charts.
+
+### Privacy
+
+Visitors see what's collected in the site footer and can switch it off there.
+Browsers sending Global Privacy Control or Do Not Track, automated browsers and bots
+are never counted. No cookies are set (an anonymous ID lives in `localStorage`). Rows
+older than about 13 months (`ANALYTICS.retentionDays`) are deleted by the digest.
+Limits: 40 beacons per visit per hour and 5,000 per day, so a flood can't fill the
+sheet or exhaust the script's quotas.
