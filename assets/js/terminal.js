@@ -2,7 +2,7 @@
 // the page itself (cards, event log, skill list) so it never drifts from it.
 
 const EMAIL = 'successzion21@gmail.com';
-const COMMANDS = ['help', 'whoami', 'ls projects', 'cat experience', 'skills', 'contact', 'hire', 'sudo hire-zion', 'open', 'shortcut on', 'shortcut off', 'clear', 'exit'];
+const COMMANDS = ['help', 'whoami', 'ls projects', 'cat experience', 'skills', 'contact', 'cv', 'hire', 'sudo hire-zion', 'open', 'shortcut on', 'shortcut off', 'clear', 'exit'];
 const SHORTCUT_KEY = 'zs-shortcut';
 
 export function initTerminal({ openCase }) {
@@ -47,6 +47,7 @@ export function initTerminal({ openCase }) {
           'cat experience    the career event log',
           'skills            the toolkit, grouped',
           'contact           how to reach me',
+          'cv                download my CV for your role',
           'hire              jump to the request form',
           'sudo hire-zion    you know you want to',
           'shortcut on|off   enable or disable the ` key shortcut',
@@ -55,7 +56,7 @@ export function initTerminal({ openCase }) {
         return;
       case 'whoami':
         print('Zion Success', 't-hl');
-        print('Senior Full-Stack Software Engineer · Founder, ZCODES\nAbuja, Nigeria · working remotely worldwide · English, French\n6+ years of Node.js, TypeScript, React, microservices and real-time systems that stay up.');
+        print('Senior Full-Stack Software Engineer · Founder, ZCODES\nAbuja, Nigeria · remote in any timezone · open to relocation · English, French\n6+ years of Node.js, TypeScript, React, microservices and real-time systems that stay up.\nFast learner, always up for new technologies.');
         return;
       case 'ls projects':
       case 'ls':
@@ -85,6 +86,14 @@ export function initTerminal({ openCase }) {
         print(lines);
         return;
       }
+      case 'cv':
+      case 'cat cv':
+        print('ls /cv/  →  full-stack · backend · frontend · integrations (PDF, 2 pages each)', 't-ok');
+        setTimeout(() => {
+          close({ restoreFocus: false });
+          document.dispatchEvent(new CustomEvent('nav:goto', { detail: { selector: '#cv', focus: '.cv-file' } }));
+        }, 450);
+        return;
       case 'hire':
         print('→ routing you to POST /v1/hire-zion …', 't-ok');
         setTimeout(() => {

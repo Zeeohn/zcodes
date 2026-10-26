@@ -8,6 +8,7 @@ import { initWork } from './work.js';
 import { initTerminal } from './terminal.js';
 import { initSkills } from './skills.js';
 import { initContact } from './contact.js';
+import { initCv } from './cv.js';
 import { initTyper } from './typer.js';
 
 const html = document.documentElement;
@@ -185,6 +186,7 @@ function initToastAndContact() {
     toastTimer = setTimeout(() => toast.classList.remove('is-on'), 2600);
   };
   initContact({ say });
+  initCv({ say });
   $('.copy-email').addEventListener('click', async (e) => {
     const email = e.currentTarget.dataset.email;
     try {

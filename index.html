@@ -47,7 +47,8 @@
     "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/+esm",
     "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/ScrollTrigger.js/+esm",
     "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.mjs",
-    "topojson-client": "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm"
+    "topojson-client": "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm",
+    "pdf-lib": "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.esm.min.js"
   }
 }
 </script>
@@ -98,6 +99,7 @@
       <a href="#remote">Remote</a>
       <a href="#work">Work</a>
       <a href="#skills">Skills</a>
+      <a href="#cv">CV</a>
       <a href="#contact">Contact</a>
       <span class="nav-indicator" aria-hidden="true"></span>
     </nav>
@@ -130,7 +132,8 @@
         <li style="--i:3"><a href="#remote"><span>04</span>Remote</a></li>
         <li style="--i:4"><a href="#work"><span>05</span>Work</a></li>
         <li style="--i:5"><a href="#skills"><span>06</span>Skills</a></li>
-        <li style="--i:6"><a href="#contact"><span>07</span>Contact</a></li>
+        <li style="--i:6"><a href="#cv"><span>07</span>CV</a></li>
+        <li style="--i:7"><a href="#contact"><span>08</span>Contact</a></li>
       </ol>
     </nav>
     <p class="menu-hire"><a class="btn" href="#contact" data-focus="#f-name">Hire me <span aria-hidden="true">→</span></a></p>
@@ -156,7 +159,7 @@
                    <img src="assets/me.jpg" alt="" width="160" height="160"> -->
               <span class="avatar-mono">ZS</span>
             </div>
-            <p class="pill"><span class="pulse" aria-hidden="true"></span>Available for remote contracts</p>
+            <p class="pill"><span class="pulse" aria-hidden="true"></span>Open to relocation · any timezone</p>
           </div>
           <p class="section-label">00 / hello</p>
           <h1 class="hero-title" id="hero-title">I build systems<br> that <em>don't go<br> down.</em></h1>
@@ -165,7 +168,7 @@
             <li><b>99%</b> availability</li>
             <li><b>5,000+</b> daily active users</li>
             <li><b>&lt;1s</b> real-time latency</li>
-            <li><b>Abuja</b> remote · WAT (UTC+1)</li>
+            <li><b>Any</b> timezone · open to relocation</li>
           </ul>
           <div class="hero-ctas">
             <a class="btn" href="#work" data-magnetic>See my work <span aria-hidden="true">↓</span></a>
@@ -186,9 +189,11 @@
         <p class="section-label">01 / system</p>
         <h2 id="system-title">Every service I touch stays up.</h2>
         <p class="bio">Senior Full-Stack Software Engineer with 6+ years building scalable, high-performance web applications with TypeScript, Node.js, React/Next.js, MongoDB and PostgreSQL. I design microservices, APIs, secure authentication and real-time systems (Redis, Kafka) that ship to production and stay up: 50% faster integration delivery, 99% availability, 40% faster deployments.</p>
-        <p class="bio">I care about measurable impact, code quality and mentoring engineers, and I ship reliably in fast-paced teams. Through ZCODES I also build my own products: Productivity Software Suites, Jira Cloud apps on Atlassian Forge, plus automation and on-chain (Blockchain) tooling.</p>
+        <p class="bio">I care about measurable impact, code quality and mentoring engineers, and I ship reliably in fast-paced teams. I learn fast, love trying new technologies and adapt quickly to new stacks and domains. Through ZCODES I also build my own products: Productivity Software Suites, Jira Cloud apps on Atlassian Forge, plus automation and on-chain (Blockchain) tooling.</p>
         <dl class="facts">
-          <div><dt>Based</dt><dd>Abuja, Nigeria · working remotely worldwide</dd></div>
+          <div><dt>Based</dt><dd>Abuja, Nigeria · works remotely in any timezone</dd></div>
+          <div><dt>Relocation</dt><dd><strong>Open to relocating</strong> for the right opportunity</dd></div>
+          <div><dt>Learning</dt><dd>A fast learner, always keen to try new technologies and quick to adapt (currently: Rust)</dd></div>
           <div><dt>Languages</dt><dd>English, French</dd></div>
           <div><dt>Education</dt><dd>Bachelor's Degree, University of Ilorin (Oct 2018 – Oct 2023). Final project: a Chrome extension that prevents phishing attacks on the university's undergraduate portal.</dd></div>
           <div><dt>Building</dt><dd>ZCODES</dd></div>
@@ -375,7 +380,7 @@
       <div class="remote-copy" data-reveal>
         <p class="section-label">04 / remote</p>
         <h2 id="remote-title">Home in Abuja. Shipping everywhere.</h2>
-        <p class="lead">Shipped remotely for teams across North America, Europe and Africa.</p>
+        <p class="lead">Shipped remotely for teams across North America, Europe and Africa. Any timezone works for me, and I'm <strong>open to relocating</strong> for the right role.</p>
         <ul class="places">
           <li data-lat="9.0765" data-lon="7.3986" data-home><b>Abuja, Nigeria</b><span>Home base</span></li>
           <li data-lat="37.5407" data-lon="-77.4360"><b>Virginia, US</b><span>Ellucian · Senior SaaS Extensibility Consultant</span></li>
@@ -603,7 +608,7 @@
         </article>
 
         <!-- Lab -->
-        <article class="card" data-category="lab" data-slug="liquidity-engine" data-skills="automated-testing">
+        <article class="card" data-category="lab" data-slug="liquidity-engine" data-skills="python automated-testing">
           <div class="card-media"><img src="assets/svg/lab-book.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
           <div class="card-body">
             <p class="card-kicker">Lab · Python</p>
@@ -626,7 +631,7 @@
           </div>
         </article>
 
-        <article class="card" data-category="lab" data-slug="tron-energy" data-skills="automated-testing">
+        <article class="card" data-category="lab" data-slug="tron-energy" data-skills="python automated-testing">
           <div class="card-media"><img src="assets/svg/lab-energy.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
           <div class="card-body">
             <p class="card-kicker">Lab · Python, standard library only</p>
@@ -705,7 +710,7 @@
       <div class="section-head" data-reveal>
         <p class="section-label">06 / skills</p>
         <h2 id="skills-title">A constellation of tools.</h2>
-        <p class="lead">Hover a skill to see where it shipped.</p>
+        <p class="lead">Hover a skill to see where it shipped. New tools don't slow me down: I pick them up fast and adapt quickly.</p>
       </div>
       <div class="skills-grid">
         <div class="sphere" data-scene="skills" data-cursor="drag" aria-hidden="true">
@@ -713,7 +718,7 @@
           <div class="sphere-tags"></div>
         </div>
         <div class="skill-groups">
-          <div class="skill-group" data-group="languages"><h3>Languages</h3><ul><li data-skill="typescript">TypeScript</li><li data-skill="javascript">JavaScript</li></ul></div>
+          <div class="skill-group" data-group="languages"><h3>Languages</h3><ul><li data-skill="typescript">TypeScript</li><li data-skill="javascript">JavaScript</li><li data-skill="python">Python</li><li data-skill="go">Go</li><li data-skill="rust" class="is-learning">Rust (learning)</li></ul></div>
           <div class="skill-group" data-group="frontend"><h3>Frontend</h3><ul><li data-skill="react">React</li><li data-skill="nextjs">Next.js</li><li data-skill="redux">Redux Toolkit &amp; Context API</li></ul></div>
           <div class="skill-group" data-group="backend"><h3>Backend</h3><ul><li data-skill="nodejs">Node.js</li><li data-skill="expressjs">Express.js</li><li data-skill="graphql">GraphQL</li><li data-skill="grpc">gRPC</li><li data-skill="rest">REST</li><li data-skill="socket-io">Socket.io</li><li data-skill="microservices">Microservices</li><li data-skill="jwt-auth">JWT auth</li></ul></div>
           <div class="skill-group" data-group="data"><h3>Data</h3><ul><li data-skill="postgresql">PostgreSQL</li><li data-skill="mongodb">MongoDB</li><li data-skill="oracledb">OracleDB</li><li data-skill="redis">Redis</li><li data-skill="kafka">Kafka</li></ul></div>
@@ -725,13 +730,61 @@
     </div>
   </section>
 
-  <!-- 07 · CONTACT -->
+  <!-- 07 · CV: one PDF per role. Visitors leave their name and email once, then downloads start
+       immediately (assets/js/cv.js). The contact form in 08 is separate. -->
+  <section class="section cv" id="cv" aria-labelledby="cv-title" data-tone="brand">
+    <div class="wrap cv-grid">
+      <div class="cv-copy" data-reveal>
+        <p class="section-label">07 / cv</p>
+        <h2 id="cv-title">My CV, cut for your role.</h2>
+        <p class="lead">Grab the version that matches the role you're hiring for. Each one leads with the experience that matters most for that job.</p>
+        <ul class="cv-points">
+          <li><b>Two pages,</b> ATS-friendly PDF, ready to forward to your hiring team.</li>
+          <li><b>Open to relocation</b> for the right opportunity, or remote in any timezone.</li>
+          <li><b>Prefer to talk first?</b> <a href="#contact" data-focus="#f-name">Send me a message</a>.</li>
+        </ul>
+      </div>
+
+      <div class="api cv-files" data-reveal>
+        <div class="api-bar">
+          <span class="api-method api-get">GET</span>
+          <span class="api-url mono">/cv/</span>
+          <span class="cv-count mono dim">4 files</span>
+        </div>
+        <ul class="cv-list" aria-label="CV versions">
+          <li><button type="button" class="cv-file" data-role="fullstack"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Full-Stack Engineer</b><span class="mono">Zion-Success-CV-Full-Stack-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+          <li><button type="button" class="cv-file" data-role="backend"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Backend Engineer</b><span class="mono">Zion-Success-CV-Backend-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+          <li><button type="button" class="cv-file" data-role="frontend"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Frontend Engineer</b><span class="mono">Zion-Success-CV-Frontend-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+          <li><button type="button" class="cv-file" data-role="solutions"><span class="cv-ico" aria-hidden="true">PDF</span><span class="cv-meta"><b>Integrations &amp; Solutions Engineer</b><span class="mono">Zion-Success-CV-Integrations-Solutions-Engineer.pdf · 2 pages</span></span><span class="cv-dl" aria-hidden="true">↓</span></button></li>
+        </ul>
+        <form id="cv-gate" class="cv-gate" hidden>
+          <p class="cv-gate-title"><b class="cv-gate-file"></b></p>
+          <p class="cv-help" id="cv-gate-help">Quick details so I know who's reading; your download starts right away.</p>
+          <div class="json mono">
+            <div class="j-row"><label for="cv-name"><span class="j-k">"name"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="&quot;Ada Lovelace&quot;" aria-describedby="cv-gate-help"></span></div>
+            <div class="j-row"><label for="cv-email"><span class="j-k">"email"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="&quot;ada@company.com&quot;"></span></div>
+            <div class="j-row"><label for="cv-company"><span class="j-k">"company"</span><span class="j-p">:</span></label><span class="j-field"><input id="cv-company" name="company" type="text" autocomplete="organization" maxlength="120" placeholder="&quot;Analytical Engines&quot; (optional)"></span></div>
+          </div>
+          <div class="hp" aria-hidden="true"><label for="cv-website">Website</label><input id="cv-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <p class="api-error" role="alert"></p>
+          <div class="cv-gate-actions">
+            <button type="submit" class="btn">Download PDF <span aria-hidden="true">↓</span></button>
+            <button type="button" class="link-btn cv-cancel">Cancel</button>
+          </div>
+        </form>
+        <p class="cv-status mono" role="status"></p>
+        <noscript><p class="cv-help cv-noscript">Downloads need JavaScript. Email <a href="mailto:successzion21@gmail.com?subject=CV%20request">successzion21@gmail.com</a> and I'll send the version you need.</p></noscript>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 · CONTACT -->
   <section class="section contact" id="contact" aria-labelledby="contact-title" data-tone="brand">
     <div class="wrap contact-grid">
       <div class="contact-copy" data-reveal>
-        <p class="section-label">07 / contact</p>
+        <p class="section-label">08 / contact</p>
         <h2 id="contact-title">Send a request.</h2>
-        <p class="lead">Remote contracts, senior full-stack roles, or a system that needs to stop going down. The endpoint is open.</p>
+        <p class="lead">Remote contracts or full-time roles in any timezone, or a system that needs to stop going down. <strong>Open to relocation</strong> for the right opportunity. The endpoint is open.</p>
         <p class="email-row">
           <a class="email" href="mailto:successzion21@gmail.com">successzion21@gmail.com</a>
           <button type="button" class="btn btn-ghost btn-small copy-email" data-email="successzion21@gmail.com">Copy email</button>

@@ -35,6 +35,13 @@ checked; see "Security" below).
 6. Send yourself a test request from the live site. If the first one lands in Spam,
    mark it **Not spam** so later ones go to the inbox.
 
+**CV download notices.** When someone downloads a CV for the first time in a visit,
+the site sends you a heads-up through this relay (who, which role, which company). Their
+message starts with `CV DOWNLOAD: <role>`; once you deploy this version of `Code.gs`
+they arrive titled "CV downloaded (<role>) by <name>". An older deployment still
+delivers them, under the usual "Hire request from" subject. Downloads never wait for
+the relay, so they work even if it's down.
+
 **Changing the script later:** edit it, then go to **Deploy → Manage deployments →
 ✏️ → Version: New version → Deploy**. The URL stays the same.
 
