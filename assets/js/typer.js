@@ -21,7 +21,8 @@ const PHRASES = [
   ['80% less', 'custom code to', 'maintain.'],
   ['Node, React,', 'TypeScript.', 'Fluent in all.'],
   ['APIs with', 'impeccable', 'manners.'],
-  ['From Abuja', 'to everywhere,', 'remotely.'],
+  ['Any timezone.', 'Or relocate', 'for the role.'],
+  ['New stack?', 'I learn fast,', 'ship faster.'],
   ['Distributed', 'systems, calm', 'deploys.'],
   ['Hard problems?', 'Bring them', 'on.'],
 ];

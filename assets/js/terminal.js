@@ -56,7 +56,7 @@ export function initTerminal({ openCase }) {
         return;
       case 'whoami':
         print('Zion Success', 't-hl');
-        print('Senior Full-Stack Software Engineer · Founder, ZCODES\nAbuja, Nigeria · working remotely worldwide · English, French\n6+ years of Node.js, TypeScript, React, microservices and real-time systems that stay up.');
+        print('Senior Full-Stack Software Engineer · Founder, ZCODES\nAbuja, Nigeria · remote in any timezone · open to relocation · English, French\n6+ years of Node.js, TypeScript, React, microservices and real-time systems that stay up.\nFast learner, always up for new technologies.');
         return;
       case 'ls projects':
       case 'ls':
