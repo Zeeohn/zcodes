@@ -7,6 +7,7 @@
 // section scrolls into view so the click feels instant. Each first download also
 // notifies Zion through the contact relay (in the background; it never blocks).
 import { relaySend, clean } from './contact.js';
+import { track } from './analytics.js';
 
 const BLOB_URL = 'assets/cv/cv.enc.json';
 // Not a secret: keeps the text out of crawlable files. Must match encrypt-cv.mjs.
@@ -94,6 +95,7 @@ export function initCv({ say }) {
       clearTimeout(slow);
       setStatus([Object.assign(document.createElement('span'), { className: 'code-ok', textContent: '200 OK' }), ` ${fileName(role)} · `, link], 'is-ok');
       say('Download started ✓');
+      track('cv_download', { role });
       setTimeout(() => URL.revokeObjectURL(url), 60_000);
     } catch {
       clearTimeout(slow);

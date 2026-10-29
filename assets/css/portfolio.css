@@ -548,6 +548,12 @@ form[aria-busy="true"] .btn { cursor: progress; }
 .prefs .link-btn { color: #CBD5E1; text-align: left; }
 .shortcut-toggle::after { content: " · on"; color: var(--green); }
 .shortcut-toggle[aria-pressed="false"]::after { content: " · off"; color: var(--coral-text); }
+.analytics-toggle::after { content: " · on"; color: var(--green); }
+.analytics-toggle[aria-pressed="false"]::after { content: " · off"; color: var(--coral-text); }
+.analytics-toggle:disabled { opacity: .7; cursor: not-allowed; }
+.analytics-note summary { cursor: pointer; color: #CBD5E1; }
+.analytics-note summary:hover { color: var(--text); }
+.analytics-note p { max-width: 80ch; margin: 10px 0 0; line-height: 1.6; }
 .prefs .motion-toggle[aria-pressed="true"] { color: #FBBF24; }
 
 /* ---------- Lenis ---------- */
@@ -608,3 +614,4 @@ html.lenis, html.lenis body { height: auto; }
 html:not(.js) .cv-list { display: none; }
 .cv-noscript { margin: 8px 16px 16px; }
 .skill-group li.is-learning > * { border-style: dashed; color: var(--muted); }
+.analytics-note + .footer-note { border-top: 0; padding-top: 0; }

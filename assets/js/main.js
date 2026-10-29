@@ -10,6 +10,7 @@ import { initSkills } from './skills.js';
 import { initContact } from './contact.js';
 import { initCv } from './cv.js';
 import { initTyper } from './typer.js';
+import { initAnalytics, analyticsOptedOut, setAnalyticsOptOut } from './analytics.js';
 
 const html = document.documentElement;
 const $ = (s, r = document) => r.querySelector(s);
@@ -31,6 +32,8 @@ initMotionToggle();
 initCareerCarousel();
 initMagnetic();
 initToastAndContact();
+initAnalytics({ endpoint: $('#hire-form')?.dataset.endpoint?.trim() });
+initAnalyticsToggle();
 initScenes(work);
 initMotion();
 
@@ -144,6 +147,22 @@ function initMotionToggle() {
   const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(motion.paused)));
   buttons.forEach((b) => b.addEventListener('click', () => setMotionPaused(!motion.paused)));
   document.addEventListener('motion:change', sync);
+  sync();
+}
+
+/* ---------- Footer: visit analytics on/off (the choice is stored in this browser) ---------- */
+function initAnalyticsToggle() {
+  const button = $('.analytics-toggle');
+  const signal = navigator.globalPrivacyControl === true || navigator.doNotTrack === '1';
+  const sync = () => button.setAttribute('aria-pressed', String(!signal && !analyticsOptedOut()));
+  if (signal) {
+    button.disabled = true;
+    button.title = 'Off: your browser asks sites not to track (Global Privacy Control / Do Not Track)';
+  }
+  button.addEventListener('click', () => {
+    setAnalyticsOptOut(!analyticsOptedOut());
+    sync();
+  });
   sync();
 }
 

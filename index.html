@@ -826,7 +826,7 @@
         </div>
         <!-- Honeypot: hidden from people and assistive tech; bots that fill it are dropped server-side. -->
         <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-        <p class="api-note">Lands straight in my inbox. Guarded by a honeypot, rate limits and a proof-of-work stamp; no cookies, no trackers.</p>
+        <p class="api-note">Lands straight in my inbox. Guarded by a honeypot, rate limits and a proof-of-work stamp. No cookies.</p>
         <noscript><p class="api-error">Sending needs JavaScript. Email <a href="mailto:successzion21@gmail.com">successzion21@gmail.com</a> directly instead.</p></noscript>
         <p class="api-error" role="alert"></p>
         <div class="api-response" hidden>
@@ -854,9 +854,14 @@
       <ul>
         <li><button type="button" class="link-btn motion-toggle" aria-pressed="false">Pause animations</button></li>
         <li><button type="button" class="link-btn shortcut-toggle" aria-pressed="true">Backtick (`) terminal shortcut</button></li>
+        <li><button type="button" class="link-btn analytics-toggle" aria-pressed="true" aria-describedby="analytics-note">Visit analytics</button></li>
       </ul>
     </div>
-    <p class="footer-note">Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI. No cookies, no trackers.</p>
+    <details class="footer-note analytics-note" id="analytics-note">
+      <summary>No cookies. Privacy-friendly visit analytics (what's collected)</summary>
+      <p>To see which parts of this site are useful, each visit records: an anonymous random ID kept in your browser, the page you came from, your browser, device type, language and screen size, an approximate location (city, country and network) looked up from your IP address by GeoJS (the address itself is never stored), the sections you scrolled to and how long you stayed, and clicks on key links. Visits are never linked to your name or email, even if you use the CV or contact form. Data stays in my private Google Sheet, is never sold or shared, and is deleted after about 13 months. You can switch it off under Preferences; browsers that send Global Privacy Control or Do Not Track are never counted.</p>
+    </details>
+    <p class="footer-note">Not affiliated with Atlassian, Sentry, GlitchTip or CircleCI.</p>
   </div>
 </footer>
 
