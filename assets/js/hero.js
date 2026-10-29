@@ -31,15 +31,15 @@ export async function initHero(root) {
   const mesh = new THREE.Mesh(
     markGeometry(svg.replace(/currentColor/g, '#fff')),
     new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
+      color: 0xe6fff3, // a hint of brand green in every reflection
       metalness: 1,
       roughness: 0.16,
       envMapIntensity: 1.25,
       clearcoat: 1,
       clearcoatRoughness: 0.05,
-      iridescence: 0.85,
+      iridescence: 0.35, // kept low: strong thin-film colour drifts to purple
       iridescenceIOR: 1.45,
-      iridescenceThicknessRange: [180, 520],
+      iridescenceThicknessRange: [260, 420],
       transparent: true,
     }),
   );
@@ -162,8 +162,8 @@ function markGeometry(svgText) {
 }
 
 /**
- * Builds an HDR environment in brand colours (ink dome, indigo/violet/coral
- * glows, white softboxes) so the metal reflects ZCODES colours, not a grey room.
+ * Builds an HDR environment in brand colours (navy dome, green/mint glows,
+ * a soft navy rim, white softboxes) so the metal reflects ZCODES colours, not a grey room.
  */
 function brandEnvironment(renderer) {
   const env = new THREE.Scene();
@@ -176,9 +176,9 @@ function brandEnvironment(renderer) {
         varying vec3 vP;
         void main() {
           float y = vP.y * 0.5 + 0.5;
-          vec3 c = mix(vec3(0.02, 0.03, 0.07), vec3(0.49, 0.23, 0.93) * 1.3, smoothstep(0.45, 1.0, y));
-          c += vec3(0.36, 0.36, 0.84) * 2.2 * pow(max(0.0, dot(vP, normalize(vec3(-1.0, 0.25, 0.7)))), 3.0);
-          c += vec3(0.95, 0.33, 0.35) * 1.6 * pow(max(0.0, dot(vP, normalize(vec3(1.0, -0.35, 0.5)))), 5.0);
+          vec3 c = mix(vec3(0.04, 0.02, 0.12), vec3(0.07, 0.89, 0.52) * 1.1, smoothstep(0.45, 1.0, y));
+          c += vec3(0.06, 0.73, 0.63) * 2.0 * pow(max(0.0, dot(vP, normalize(vec3(-1.0, 0.25, 0.7)))), 3.0);
+          c += vec3(0.20, 0.12, 0.55) * 1.6 * pow(max(0.0, dot(vP, normalize(vec3(1.0, -0.35, 0.5)))), 5.0);
           c += vec3(0.05, 0.65, 0.64) * 0.8 * pow(max(0.0, dot(vP, normalize(vec3(0.2, -1.0, 0.4)))), 4.0);
           gl_FragColor = vec4(c, 1.0);
         }`,
@@ -194,8 +194,8 @@ function brandEnvironment(renderer) {
     env.add(m);
   };
   softbox('#ffffff', 5, [0, 6, 5], 9, 1.1);
-  softbox('#a5a6f6', 3.5, [-6, 0.5, 4], 1.2, 7);
-  softbox('#c4a7ff', 2.5, [6, -1, 3], 1, 5);
+  softbox('#5ff0b0', 3.5, [-6, 0.5, 4], 1.2, 7);
+  softbox('#12e284', 2.5, [6, -1, 3], 1, 5);
   // A diagonal strip almost behind the camera: its reflection is the glossy streak
   // that sweeps across the Z's face as it tilts.
   const strip = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 14), new THREE.MeshBasicMaterial({ color: new THREE.Color('#ffffff').multiplyScalar(2.2), side: THREE.DoubleSide }));
@@ -264,9 +264,9 @@ function shatterParticles(mesh, count) {
       void main() {
         float d = length(gl_PointCoord - 0.5);
         float a = smoothstep(0.5, 0.0, d) * vAlpha;
-        vec3 indigo = vec3(0.36, 0.36, 0.84), violet = vec3(0.49, 0.23, 0.93), coral = vec3(0.95, 0.33, 0.35);
-        vec3 c = mix(indigo, violet, smoothstep(0.0, 0.7, vSeed));
-        c = mix(c, coral, step(0.9, vSeed));
+        vec3 green = vec3(0.07, 0.89, 0.52), teal = vec3(0.06, 0.73, 0.63), mint = vec3(0.37, 0.94, 0.69);
+        vec3 c = mix(green, teal, smoothstep(0.0, 0.7, vSeed));
+        c = mix(c, mint, step(0.9, vSeed));
         c = mix(c, vec3(1.0), step(0.97, vSeed) * 0.7);
         gl_FragColor = vec4(c * 1.9, a);
       }`,

@@ -7,8 +7,8 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 const PAGE = [595.28, 841.89]; // A4 in points
 const MARGIN = 46;
 const WIDTH = PAGE[0] - MARGIN * 2;
-const INK = rgb(0.043, 0.071, 0.125);
-const ACCENT = rgb(0.357, 0.357, 0.839);
+const INK = rgb(0.063, 0.031, 0.192); // brand navy #100831
+const ACCENT = rgb(0.039, 0.62, 0.357); // brand green, darkened for print (#0A9E5B)
 const MUTED = rgb(0.29, 0.33, 0.41);
 const RULE = rgb(0.84, 0.86, 0.9);
 

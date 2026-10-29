@@ -40,7 +40,7 @@ export async function initGlobe(root) {
   scene.add(globe);
 
   // Ocean body hides the far side; a fresnel shell gives the atmosphere glow.
-  globe.add(new THREE.Mesh(new THREE.SphereGeometry(0.99, 64, 32), new THREE.MeshBasicMaterial({ color: 0x0c1428 })));
+  globe.add(new THREE.Mesh(new THREE.SphereGeometry(0.99, 64, 32), new THREE.MeshBasicMaterial({ color: 0x0e0a2c })));
   scene.add(atmosphere());
   const dotPoints = makeDots(dots);
   globe.add(dotPoints);
@@ -201,7 +201,7 @@ function makeDots(dots) {
       varying float vLight, vLat;
       void main() {
         if (length(gl_PointCoord - 0.5) > 0.5) discard;
-        vec3 c = mix(vec3(0.05, 0.65, 0.64), vec3(0.36, 0.36, 0.84), smoothstep(-0.6, 0.8, vLat));
+        vec3 c = mix(vec3(0.06, 0.73, 0.63), vec3(0.07, 0.89, 0.52), smoothstep(-0.6, 0.8, vLat));
         gl_FragColor = vec4(c * (0.45 + 0.75 * vLight), 0.95);
       }`,
   }));
@@ -218,7 +218,7 @@ function atmosphere() {
       varying vec3 vN;
       void main() {
         float a = pow(clamp(0.78 + vN.z, 0.0, 1.0), 4.0);
-        gl_FragColor = vec4(mix(vec3(0.36, 0.36, 0.84), vec3(0.05, 0.65, 0.64), 0.4), a * 0.9);
+        gl_FragColor = vec4(mix(vec3(0.07, 0.89, 0.52), vec3(0.06, 0.73, 0.63), 0.4), a * 0.9);
       }`,
   }));
 }
@@ -249,7 +249,7 @@ function makeArc(from, to, offset) {
         float head = fract(uTime * 0.28 + uOffset) * 1.4 - 0.2;
         float d = head - vT;
         float trail = d > 0.0 ? smoothstep(0.3, 0.0, d) : smoothstep(-0.015, 0.0, d);
-        vec3 c = mix(vec3(0.95, 0.33, 0.35), vec3(0.49, 0.23, 0.93), vT);
+        vec3 c = mix(vec3(0.95, 0.33, 0.35), vec3(0.07, 0.89, 0.52), vT);
         c = mix(c, vec3(0.05, 0.65, 0.64), smoothstep(0.6, 1.0, vT));
         gl_FragColor = vec4(c * 1.4, 0.16 + trail * 0.9);
       }`,
