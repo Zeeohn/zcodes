@@ -97,12 +97,11 @@ the first visit; you just won't have the dashboard key or the digest yet.
   countries, cities, networks/companies, sources (referrers and `utm_` campaigns);
   devices, browsers, OS, languages; how far people get through the sections; case
   studies opened, outbound clicks (GitHub, LinkedIn, product docs), CV downloads by
-  role, contact messages; **people who identified themselves** (via the CV or contact
-  form) with their company, location and every visit since; and the latest 80 visits
-  in detail. Keep the link private: anyone with it can see the data.
+  role, contact messages; and the latest 80 visits in detail. Visits are anonymous:
+  they are never linked to the names or emails people type into the CV or contact
+  form (those still reach you by email, as before). Keep the link private: anyone with it can see the data.
 - **Daily digest** at 08:00 in the script's timezone (Project settings): totals, top
-  locations, networks and sources, identified people and every visit that lasted a
-  minute or more. No email on days without visits.
+  locations, networks and sources and every visit that lasted a minute or more. No email on days without visits.
 - **Raw data**: the "Visits" sheet, one row per beacon, for your own filters or charts.
 
 ### Privacy

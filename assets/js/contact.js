@@ -4,7 +4,7 @@
 // prefilled mailto: draft. Spam controls are mirrored on the server: a honeypot,
 // a minimum fill time and a proof-of-work stamp bound to this exact message.
 
-import { track, identify } from './analytics.js';
+import { track } from './analytics.js';
 
 const FALLBACK_EMAIL = 'successzion21@gmail.com';
 const DIFFICULTY = 14; // leading zero bits; must match LIMITS.powBits in Code.gs
@@ -140,7 +140,6 @@ export function initContact({ say }) {
       });
       show(...result.status, result.ms);
       if (result.ok) {
-        identify(data);
         track('contact_sent');
         form.reset();
         startedAt = 0;

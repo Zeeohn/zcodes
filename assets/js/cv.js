@@ -7,7 +7,7 @@
 // section scrolls into view so the click feels instant. Each first download also
 // notifies Zion through the contact relay (in the background; it never blocks).
 import { relaySend, clean } from './contact.js';
-import { track, identify } from './analytics.js';
+import { track } from './analytics.js';
 
 const BLOB_URL = 'assets/cv/cv.enc.json';
 // Not a secret: keeps the text out of crawlable files. Must match encrypt-cv.mjs.
@@ -181,7 +181,6 @@ export function initCv({ say }) {
       company: clean(gate.elements.company.value, 120),
     };
     saveReader(reader);
-    identify(reader);
     const role = pendingRole;
     const opener = tiles[gate.dataset.opener];
     gate.hidden = true;

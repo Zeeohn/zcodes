@@ -7,8 +7,9 @@
 // coarse device/browser/OS; an approximate location (city, region, country and the
 // network's organisation) looked up from the IP address via GeoJS — the IP itself is
 // never sent or stored; and what happened on the page (sections reached, scroll
-// depth, engaged time, key actions). A name/email is attached only when the visitor
-// types it into the CV or contact form.
+// depth, engaged time, key actions). Visits are never linked to a name or email,
+// even when the visitor fills in the CV or contact form: that keeps the data anonymous
+// audience measurement rather than profiling of identifiable people.
 //
 // Not tracked: visitors who opt out (footer), browsers sending Global Privacy
 // Control or Do Not Track, automated browsers and bots, and the owner (open the
@@ -34,14 +35,7 @@ export function track(name, props = {}) {
   if (!state) return;
   state.events.push({ n: name, t: Math.round(performance.now() / 1000), ...props });
   if (state.events.length > MAX_EVENTS) state.events.shift();
-  if (['cv_download', 'contact_sent', 'identify'].includes(name)) flush('update');
-}
-
-/** Links a visitor id to a name/email the visitor typed into a form. */
-export function identify({ name = '', email = '', company = '' }) {
-  if (!state) return;
-  state.who = { name: name.slice(0, 120), email: email.slice(0, 200), company: company.slice(0, 120) };
-  track('identify');
+  if (['cv_download', 'contact_sent'].includes(name)) flush('update');
 }
 
 export const analyticsOptedOut = () => local.get(KEYS.optOut) === '1';
@@ -124,7 +118,6 @@ function payload(kind) {
     scroll: Math.round(state.maxScroll * 100),
     engaged: Math.round(state.engagedMs / 1000),
     events: state.events,
-    who: state.who,
   };
 }
 
@@ -152,7 +145,7 @@ export async function initAnalytics({ endpoint }) {
   }
   state = {
     endpoint, vid, sid, visitNo: Number(local.get(KEYS.visits) || 1),
-    base: null, sections: [], maxScroll: 0, engagedMs: 0, events: [], who: null,
+    base: null, sections: [], maxScroll: 0, engagedMs: 0, events: [],
   };
 
   // Sections reached, in order: a section counts once it crosses the middle of the

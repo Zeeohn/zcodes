@@ -283,7 +283,8 @@ function recordVisit(d) {
     events: (Array.isArray(d.events) ? d.events : []).slice(-60).map(cleanEvent).filter(Boolean),
   };
   const who = d.who && typeof d.who === 'object' ? d.who : null;
-  if (who) v.who = { name: clean(who.name, 120), email: clean(who.email, 200).toLowerCase(), company: clean(who.company, 120) };
+  // Visits are kept anonymous: identities sent by older clients are dropped, never stored.
+  void who;
 
   const source = v.refHost || (v.utm ? 'utm: ' + v.utm : 'Direct');
   analyticsSheet().appendRow([new Date(), v.kind, v.sid, v.vid, v.country || v.tz, v.city, v.org, source,
@@ -624,7 +625,6 @@ function renderDashboard(days) {
     kpi('Contact messages', s.contacts, '') +
     '</div>' +
     '<section class="card wide"><h2>Visits per day</h2><svg class="chart" viewBox="0 0 100 100" preserveAspectRatio="none">' + bars + '</svg><p class="dim axis"><span>' + dayKeys[0] + '</span><span>today</span></p></section>' +
-    '<section class="card wide"><h2>People who identified themselves</h2><div class="scroll"><table class="list"><tr><th>Who</th><th>Company</th><th>Where</th><th>CV</th><th>Visits</th><th>Last seen</th></tr>' + people + '</table></div></section>' +
     '<div class="grid">' +
     table('Countries', s.countries) + table('Cities', s.cities) + table('Networks / companies', s.orgs) +
     table('Sources', s.sources) + table('Sections reached', reach, { limit: 12 }) + table('Actions', s.actions) +
