@@ -21,6 +21,28 @@
 <tr><td>Both</td><td>storage:app</td><td>Settings, encrypted secrets, issue links, activity log.</td></tr>
 <tr><td>Build Beacon</td><td>read:jira-work, write:jira-work</td><td>Send builds and deployments, comment on failures, set the issue property used for JQL.</td></tr>
 </table>
+<h2>Security controls</h2>
+<ul>
+<li><b>Access control and authentication.</b> Only Jira administrators can view or change app settings; every settings action checks this on the server. Webhook senders must prove who they are with an HMAC-SHA256 signature or a secret token before anything is processed. Only ZCODES can deploy the apps; deployment credentials are kept out of the source code.</li>
+<li><b>Data protection.</b> All traffic to and from the apps uses HTTPS (TLS), handled by Atlassian. App data stays in Forge hosted storage, which Atlassian encrypts at rest; secrets use Forge's encrypted secret storage. The apps store only what they need: settings, the link between each external issue or build and its Jira issue, and a short activity log.</li>
+<li><b>Monitoring and logging.</b> We monitor invocations and errors in the Atlassian developer console. Logs record operational details only (event type, outcome, Jira issue key); webhook bodies, error details from your Sentry or CircleCI projects and secrets are never written to logs.</li>
+<li><b>Infrastructure.</b> There are no ZCODES servers: compute, storage and networking are provided by Atlassian Forge, so the apps inherit Atlassian's platform security, patching and data-residency controls.</li>
+</ul>
+<h2>Vulnerability management</h2>
+<ul>
+<li><b>Reporting.</b> Anyone can report a vulnerability by email (below). We acknowledge within 2 business days.</li>
+<li><b>Triage.</b> Within 5 business days we confirm the issue, rate its severity (critical, high, medium or low, following CVSS) and tell the reporter.</li>
+<li><b>Remediation.</b> Target times from confirmation: critical within 7 days, high within 30 days, medium within 90 days, low in the next planned release.</li>
+<li><b>Patching.</b> Fixes are deployed through Forge to every installation at once, so customers don't need to update anything. Every release passes our automated tests and Atlassian's Forge security scanner before deployment, and dependencies are kept minimal and updated when security advisories are published.</li>
+</ul>
+<h2>Security incidents</h2>
+<p>If we confirm an incident that affects customer data, we:</p>
+<ol>
+<li>contain it straight away, for example by rotating secrets or disabling the affected webhook;</li>
+<li>notify the site administrators of affected customers by email within 72 hours of confirming it, saying what happened, which data was affected and what they should do;</li>
+<li>publish a notice on our <a href="support.html">Support</a> page and report it to Atlassian through the Marketplace partner channel;</li>
+<li>after the fix, review the root cause and update our controls and this page.</li>
+</ol>
 <h2>Reporting a vulnerability</h2>
 <p>Email <a href="mailto:support@behumbot.xyz">support@behumbot.xyz</a> with the subject "Security". We acknowledge within 2 business days and keep you updated until it is fixed. Please don't publicly disclose issues before we have released a fix.</p>
 </article></main><footer><div class="in"><span>© 2026 ZCODES</span><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
